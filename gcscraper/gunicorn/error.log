@@ -2274,3 +2274,239 @@ File: "gunicorn/conf.py", line 60, in worker_int
 [2019-05-09 14:37:04 +0900] [7714] [DEBUG] GET /chat/top
 [2019-05-09 14:37:07 +0900] [7714] [DEBUG] GET /chat/history
 [2019-05-09 14:38:41 +0900] [7714] [DEBUG] GET /chat/top
+[2019-05-13 15:14:13 +0900] [25101] [DEBUG] Current configuration:
+  config: gunicorn/conf.py
+  bind: ['127.0.0.1:8001']
+  backlog: 2048
+  workers: 1
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 600
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /var/www/projects/gcscraper.git/gcscraper
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 501
+  group: 501
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: gunicorn/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: gunicorn/error.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: gcscraper.wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7efc0a1026a8>
+  on_reload: <function OnReload.on_reload at 0x7efc0a1027b8>
+  when_ready: <function when_ready at 0x7efc0a103268>
+  pre_fork: <function pre_fork at 0x7efc0a103158>
+  post_fork: <function post_fork at 0x7efc0a1030d0>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7efc0a102bf8>
+  worker_int: <function worker_int at 0x7efc0a1032f0>
+  worker_abort: <function worker_abort at 0x7efc0a103378>
+  pre_exec: <function pre_exec at 0x7efc0a1031e0>
+  pre_request: <function PreRequest.pre_request at 0x7efc09e7f0d0>
+  post_request: <function PostRequest.post_request at 0x7efc09e7f158>
+  child_exit: <function ChildExit.child_exit at 0x7efc09e7f268>
+  worker_exit: <function WorkerExit.worker_exit at 0x7efc09e7f378>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7efc09e7f488>
+  on_exit: <function OnExit.on_exit at 0x7efc09e7f598>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: TLSv1
+  raw_paste_global_conf: []
+[2019-05-13 15:14:13 +0900] [25101] [INFO] Starting gunicorn 19.9.0
+[2019-05-13 15:14:13 +0900] [25101] [DEBUG] Arbiter booted
+[2019-05-13 15:14:13 +0900] [25101] [INFO] Listening at: http://127.0.0.1:8001 (25101)
+[2019-05-13 15:14:13 +0900] [25101] [INFO] Using worker: sync
+[2019-05-13 15:14:13 +0900] [25101] [INFO] Server is ready. Spawning workers
+[2019-05-13 15:14:13 +0900] [25104] [INFO] Booting worker with pid: 25104
+[2019-05-13 15:14:13 +0900] [25104] [INFO] Worker spawned (pid: 25104)
+[2019-05-13 15:14:13 +0900] [25101] [DEBUG] 1 workers
+[2019-05-13 15:14:26 +0900] [25101] [INFO] Handling signal: int
+[2019-05-13 06:14:26 +0000] [25104] [INFO] worker received INT or QUIT signal
+[2019-05-13 06:14:26 +0000] [25104] [DEBUG] 
+# Thread: MainThread(139621116757760)
+File: "/var/www/projects/myenv/bin/gunicorn", line 11, in <module>
+  sys.exit(run())
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/app/wsgiapp.py", line 61, in run
+  WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/app/base.py", line 223, in run
+  super(Application, self).run()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/app/base.py", line 72, in run
+  Arbiter(self).run()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/arbiter.py", line 203, in run
+  self.manage_workers()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/arbiter.py", line 545, in manage_workers
+  self.spawn_workers()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/arbiter.py", line 616, in spawn_workers
+  self.spawn_worker()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+  worker.init_process()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/workers/base.py", line 134, in init_process
+  self.run()
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/workers/sync.py", line 124, in run
+  self.run_for_one(timeout)
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/workers/sync.py", line 83, in run_for_one
+  self.wait(timeout)
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/workers/sync.py", line 35, in wait
+  ret = select.select(self.wait_fds, [], [], timeout)
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/workers/base.py", line 189, in handle_quit
+  self.cfg.worker_int(self)
+File: "gunicorn/conf.py", line 51, in worker_int
+  worker.log.info("worker received INT or QUIT signal")
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/glogging.py", line 271, in info
+  self.error_log.info(msg, *args, **kwargs)
+File: "/usr/lib64/python3.6/logging/__init__.py", line 1308, in info
+  self._log(INFO, msg, args, **kwargs)
+File: "/usr/lib64/python3.6/logging/__init__.py", line 1444, in _log
+  self.handle(record)
+File: "/usr/lib64/python3.6/logging/__init__.py", line 1454, in handle
+  self.callHandlers(record)
+File: "/usr/lib64/python3.6/logging/__init__.py", line 1516, in callHandlers
+  hdlr.handle(record)
+File: "/usr/lib64/python3.6/logging/__init__.py", line 865, in handle
+  self.emit(record)
+File: "/usr/lib64/python3.6/logging/__init__.py", line 1071, in emit
+  self.stream = self._open()
+File: "/usr/lib64/python3.6/logging/__init__.py", line 1061, in _open
+  return open(self.baseFilename, self.mode, encoding=self.encoding)
+File: "/usr/lib64/python3.6/_bootlocale.py", line 23, in getpreferredencoding
+  def getpreferredencoding(do_setlocale=True):
+File: "/var/www/projects/myenv/lib64/python3.6/site-packages/gunicorn/workers/base.py", line 189, in handle_quit
+  self.cfg.worker_int(self)
+File: "gunicorn/conf.py", line 60, in worker_int
+  for filename, lineno, name, line in traceback.extract_stack(stack):
+[2019-05-13 06:14:26 +0000] [25104] [INFO] Worker exiting (pid: 25104)
+[2019-05-13 15:14:26 +0900] [25101] [INFO] Shutting down: Master
+[2019-05-13 15:26:23 +0900] [25141] [DEBUG] Current configuration:
+  config: gunicorn/conf.py
+  bind: ['127.0.0.1:8001']
+  backlog: 2048
+  workers: 1
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 600
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /var/www/projects/gcscraper.git/gcscraper
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 501
+  group: 501
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: gunicorn/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: gunicorn/error.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: gcscraper.wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7f2ec5b5a840>
+  on_reload: <function OnReload.on_reload at 0x7f2ec5b5a950>
+  when_ready: <function when_ready at 0x7f2ec5b59400>
+  pre_fork: <function pre_fork at 0x7f2ec5b592f0>
+  post_fork: <function post_fork at 0x7f2ec5b59268>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7f2ec5b5ad90>
+  worker_int: <function worker_int at 0x7f2ec5b59488>
+  worker_abort: <function worker_abort at 0x7f2ec5b59510>
+  pre_exec: <function pre_exec at 0x7f2ec5b59378>
+  pre_request: <function PreRequest.pre_request at 0x7f2ec5b6a268>
+  post_request: <function PostRequest.post_request at 0x7f2ec5b6a2f0>
+  child_exit: <function ChildExit.child_exit at 0x7f2ec5b6a400>
+  worker_exit: <function WorkerExit.worker_exit at 0x7f2ec5b6a510>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7f2ec5b6a620>
+  on_exit: <function OnExit.on_exit at 0x7f2ec5b6a730>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: TLSv1
+  raw_paste_global_conf: []
+[2019-05-13 15:26:23 +0900] [25141] [INFO] Starting gunicorn 19.9.0
+[2019-05-13 15:26:23 +0900] [25141] [DEBUG] Arbiter booted
+[2019-05-13 15:26:23 +0900] [25141] [INFO] Listening at: http://127.0.0.1:8001 (25141)
+[2019-05-13 15:26:23 +0900] [25141] [INFO] Using worker: sync
+[2019-05-13 15:26:23 +0900] [25141] [INFO] Server is ready. Spawning workers
+[2019-05-13 15:26:23 +0900] [25144] [INFO] Booting worker with pid: 25144
+[2019-05-13 15:26:23 +0900] [25144] [INFO] Worker spawned (pid: 25144)
+[2019-05-13 15:26:23 +0900] [25141] [DEBUG] 1 workers
