@@ -2605,3 +2605,5 @@ File: "gunicorn/conf.py", line 60, in worker_int
 [2019-05-13 15:27:56 +0900] [25165] [DEBUG] 1 workers
 [2019-05-13 06:37:53 +0000] [25168] [DEBUG] GET /app
 [2019-05-13 06:37:53 +0000] [25168] [DEBUG] GET /app/
+[2019-05-13 06:40:42 +0000] [25168] [DEBUG] GET /app/
+[2019-05-13 06:40:54 +0000] [25168] [DEBUG] POST /app/
