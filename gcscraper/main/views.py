@@ -8,3 +8,7 @@ class Top(generic.TemplateView):
 class PageList(generic.ListView):
     model = Page
     template_name = 'main_page_list.html'
+
+class GroupList(generic.ListView):
+    model = Group
+    template_name = 'main_group_list.html'

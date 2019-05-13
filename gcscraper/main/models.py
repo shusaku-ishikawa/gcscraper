@@ -1,13 +1,25 @@
 from django.db import models
 
+class Group(models.Model):
+    name = models.CharField(
+        verbose_name = '名前',
+        max_length = 100
+    )
+    
 class Page(models.Model):
     parent = models.ForeignKey(
         verbose_name = '親ページ',
         to = 'self',
-        related_name = 'myparent',
+        related_name = 'children',
         null = True,
         blank = True,
         on_delete = models.SET_NULL
+    )
+    group = models.ForeignKey(
+        to = Group,
+        verbose_name = 'グループ',
+        on_delete = models.CASCADE,
+        related_name = 'pages'
     )
     page_url = models.URLField(
         verbose_name = "ページURL", 

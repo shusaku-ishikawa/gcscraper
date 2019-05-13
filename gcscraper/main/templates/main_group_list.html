@@ -1,0 +1,115 @@
+{% extends 'main_base.html' %}
+{% load static %}
+{% block style %}
+    <style>
+        li {
+            text-align: left
+        }
+        /* Remove default bullets */
+        ul, #myUL {
+            list-style-type: none;
+        }
+
+        /* Remove margins and padding from the parent ul */
+        #myUL {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style the caret/arrow */
+        .caret {
+            cursor: pointer; 
+            user-select: none; /* Prevent text selection */
+        }
+
+        /* Create the caret/arrow with a unicode, and style it */
+        .caret::before {
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+        .caret-down::before {
+            transform: rotate(90deg); 
+        }
+
+        /* Hide the nested list */
+        .nested {
+            display: none;
+        }
+
+        /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+        .active {
+            display: block;
+        }
+        .page-row {
+            border: lightblue solid 1px;
+            background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
+
+        }
+        input {
+            width: 100%;
+            height: 100%
+        }
+        input:read-only {
+            border:none;
+            background-color: transparent;
+            color: gray;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+グループ一覧
+{% endblock %}
+
+{% block content %}
+<ul id="myUL">
+  {% for group in object_list %}
+  <li><span class="caret">{{ group.name }}</span>
+    <ul class="nested">
+      {% for page in group.pages.all %}
+      <li>
+        <div class="row page-row">
+            <div class="col-1"><input readonly class="" type="text" value="{{ page.code }}"></div>
+            <div class="col-2"><input readonly class="" type="text" value="{{ page.comment|default_if_none:'-' }}"></div>
+            <div class="col-2"><input readonly class="" type="text" value="{{ page.company_name }}"></div>
+            <div class="col-2"><input readonly class="" type="text" value="{{ page.phone_number }}"></div>
+            <div class="col-1">
+                <input type="checkbox" value="True" {% if page.is_callable %} checked="checked"{% endif %}>
+            </div>
+            <div class="col-2">
+                <a href="{{ page.page_url }}">{{ page.page_url }}</a>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-danger">削除</button>
+                <button type="button" class="btn btn-sm btn-success">更新</button>
+            </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(function() {
+            var toggler = document.getElementsByClassName("caret");
+            var i;
+
+            for (i = 0; i < toggler.length; i++) {
+                toggler[i].addEventListener("click", function() {
+                    this.parentElement.querySelector(".nested").classList.toggle("active");
+                    this.classList.toggle("caret-down");
+                });
+            }
+        });
+        
+    
+    </script>
+{% endblock %}

@@ -9,7 +9,10 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class MyPageAdmin(admin.ModelAdmin):
-    list_display = ('page_url', 'page_html',  'code', 'comment', 'company_name', 'phone_number', 'is_callable')
+    list_display = ('group', 'page_url', 'page_html',  'code', 'comment', 'company_name', 'phone_number', 'is_callable')
+class MyGroupAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
 admin.site.register(Page, MyPageAdmin)
+admin.site.register(Group, MyGroupAdmin)
 

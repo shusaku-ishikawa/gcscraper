@@ -13,7 +13,8 @@ admin.site.index_title = 'Menu'
 urlpatterns = [
     path('', LoginView.as_view(template_name = 'admin/login.html'), name='login'),
     path('top/', views.Top.as_view(), name="top"),
-    path('li/', views.PageList.as_view(), name="page_list"),    
+    path('li/', views.PageList.as_view(), name="page_list"),
+    path('g-li/', views.GroupList.as_view(), name="group_list"),
     path('logout/', LogoutView.as_view(), name='logout'),   
 ]
 
