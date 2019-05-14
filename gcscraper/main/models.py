@@ -5,6 +5,11 @@ class Group(models.Model):
         verbose_name = '名前',
         max_length = 100
     )
+    display_order = models.IntegerField(
+        verbose_name = '表示順',
+        default = 1,
+    )
+    
     
 class Page(models.Model):
     parent = models.ForeignKey(
@@ -50,5 +55,9 @@ class Page(models.Model):
     is_callable = models.BooleanField(
         verbose_name = '電話可能',
         default = False
+    )
+    display_order = models.IntegerField(
+        verbose_name = '表示順',
+        default = 1
     )
     

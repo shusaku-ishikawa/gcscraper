@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["*"]
 AUTH_USER_MODEL = 'auth.User'
 LOGIN_URL = 'main:login'
 LOGIN_REDIRECT_URL = 'main:top'
-LOGOUT_REDIRECT_URL = 'amin:login'
+LOGOUT_REDIRECT_URL = 'main:login'
 
 
 # Application definition
