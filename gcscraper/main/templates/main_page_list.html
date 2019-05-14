@@ -3,8 +3,8 @@
 {% block style %}
     <style>
         input {
-            width: 100%;
-            height: 100%
+            width: 80%;
+            height: 80%
         }
         input:read-only {
             border:none;
@@ -14,12 +14,42 @@
         .add_above {
             width: 100%;
             height: 1px;
-            
-
         }
         .add_below {
             width: 100%;
             height: 1px;
+        }
+
+        th {
+            height: 20px!important;
+            padding: 0.2rem !important;
+            font-size: 13px;
+            background-color: gray!important;
+            color: white;
+            border-right: white solid 0.5px;
+        }
+        td {
+            /* border: gray solid 1px; */
+            cursor: grab;
+            vertical-align: middle;
+            text-align: center;
+            height: 20px!important;
+            padding: 0.2rem!important;
+            font-size: 13px;
+            border-right: white solid 0.5px;
+        }
+        td:active {
+            cursor: grabbing
+        }
+        .btn {
+            font-size: 10px!important;
+        }
+        input.checkbox {
+            height: 100%;
+            width: 100%;
+        }
+        td a {
+            color:blue!important
         }
         
     </style>
@@ -30,65 +60,104 @@
 {% endblock %}
 
 {% block content %}
-<ul id="sortable">
-    {% for page in object_list %}
-    <li class="ui-state-default">
-        <div id="{{ page.code }}">
-            <div class="add_above"></div>
-            <div class="row">
-                <div class="col-1">
+<table class="table">
+    <thead>
+        <tr>
+            <th>コード</th>
+            <th>補足</th>
+            <th>会社名</th>
+            <th>電話番号</th>
+            <th>電話可能</th>
+            <th>URL</th>
+            <th>削除</th>
+            <th>追加</th>
+        </tr>
+      
+    </thead>
+    <tbody id="sortable">
+            {% for page in object_list %}
+            <tr id="{{ page.pk }}" class="ui-state-default">
+                <td>
                     <input readonly class="" type="text" value="{{ page.code }}">
-                </div>
-                <div class="col-2">
+                </td>
+                <td>
                     <input readonly class="" type="text" value="{{ page.comment|default_if_none:'-' }}">
-                </div>
-                <div class="col-2">
+                </td>
+                <td>
                     <input readonly class="" type="text" value="{{ page.company_name }}">
-                </div>
-                <div class="col-2">
+                </td>
+                <td>
                     <input readonly class="" type="text" value="{{ page.phone_number }}">
-                </div>
-                <div class="col-1">
+                </td>
+                <td>
                     <input type="checkbox" value="True" {% if page.is_callable %} checked="checked"{% endif %}>
-                </div>
-                <div class="col-2">
+                </td>
+                <td>
                     <a href="{{ page.page_url }}">{{ page.page_url }}</a>
-                </div>
-                <div class="col-2">
+                </td>
+                <td>
                     <button type="button" class="btn btn-sm btn-danger">削除</button>
-                </div>
-            </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-success add-row-btn">上に行追加</button>
+                </td>
+            </tr>
+            {% endfor %}
+    </tbody>
 
-           
-            <div class="add_below"></div>
-        </div>
-    </li>
-    {% endfor %}
-</ul>
+</table>
 
 {% endblock %}
 
 {% block extra_js %}
     <script>
+        //function()
+        // function click_action($target) {
+        //     alert('click action');
+        // }
+        // function double_click_action($target) {
+        //     $target.attr('readonly', false);
+        // }
        $(function() {
-            $( "#sortable" ).sortable();
-            $( "#sortable" ).disableSelection();
-            
-            $('input').dblclick(function() {
-                $(this).attr('readonly', false);
+            $( "#sortable" ).sortable({
+                update: function(event, ui) {
+                    console.log(ui);
+                    var updatedInfo =  $('#sortable').sortable("toArray").join(",");
+                    console.log(updatedInfo);
+                   
+                }
             });
-            $('input').focusout(function(e) {
+            $( "#sortable" ).disableSelection();
+
+            $('.add-row-btn')
+            .on('click', function() {
+                
+            });
+
+           
+            $(document)
+            .on('dblclick', 'input', function(event) {
+                console.log(event.target);
+                $(this).attr('readonly', false);
+            })
+            .on('focusout', 'input', function(event) {
                 $(this).attr('readonly', true);
             })
+            .on('click', '.add-row-btn', function(event) {
+                var $newly_added = $('<tr>', { class: 'ui-state-default' })
+                .append($('<td>').append($('<input>', { type: 'text', class: 'code'  })))
+                .append($('<td>').append($('<input>', { type: 'text'  })))
+                .append($('<td>').append($('<input>', { type: 'text'  })))
+                .append($('<td>').append($('<input>', { type: 'text'  })))
+                .append($('<td>').append($('<input>', { type: 'checkbox'  })))
+                .append($('<td>').append($('<input>', { type: 'text'  })))
+                .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger', text: '削除'})))
+                .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-success add-row-btn', text: '上に行追加'})))
+                .insertBefore($(this).parent().parent());
+                $newly_added.find('.code').focus();
+            });
         });
-        $('.add_above').on('click', function() {
-            var code = $(this).parent().attr('id');
-            alert('コード:' + code + 'の上に行を追加します。')
-        });
-        $('.add_below').on('click', function() {
-            var code = $(this).parent().attr('id');
-            alert('コード:' + code + 'の下に行を追加します。')
-        })
+        
     
     </script>
 {% endblock %}
