@@ -92,10 +92,10 @@
                     <input readonly name="page_url" type="text" value="{{ page.page_url }}">
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger delete-row-btn">削除</button>
+                    <button type="button" class="btn btn-sm btn-success add-row-btn">追加</button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-success add-row-btn">上に行追加</button>
+                    <button type="button" class="btn btn-sm btn-danger delete-row-btn">削除</button>
                 </td>
             </tr>
             {% endfor %}
@@ -221,9 +221,9 @@
                         .append($('<td>').append($('<input>', { type: 'text', name: 'phone_number'  })))
                         .append($('<td>').append($('<input>', { type: 'checkbox', name: 'is_callable'  })))
                         .append($('<td>').append($('<input>', { type: 'text', name: 'page_url'  })))
-                        .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger delete-row-btn', text: '削除'})))
                         .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-success add-row-btn', text: '上に行追加'})))
-                        .insertBefore($target);
+                        .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger delete-row-btn', text: '削除'})))
+                        .insertAfter($target);
                         $newly_added.find('.code').dblclick();
                     } else {
                         alert('else');

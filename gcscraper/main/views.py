@@ -36,10 +36,10 @@ def create_blank_page_row(request):
         new_page = Page()
         
         insert_at = request.POST.get('insert_at')
-        before = Page.objects.get(pk = insert_at)
-        new_page.display_order = before.display_order
+        after = Page.objects.get(pk = insert_at)
+        new_page.display_order = after.display_order + 1
         # update following rows
-        Page.objects.filter(display_order__gte = before.display_order).update(display_order = F("display_order") + 1)
+        Page.objects.filter(display_order__gte = after.display_order + 1).update(display_order = F("display_order") + 1)
         new_page.save()
         return JsonResponse({'success': True, 'pk': new_page.pk})
 
@@ -59,6 +59,5 @@ def update_page_field(request):
         target = Page.objects.get(pk = pk)
         setattr(target, field_name, field_value)
         target.save()
-        
         return JsonResponse({'success': True})
-        
+
