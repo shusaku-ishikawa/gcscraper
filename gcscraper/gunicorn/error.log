@@ -41328,3 +41328,260 @@ Did you install mysqlclient?
 [2019-05-15 17:26:59 +0900] [28820] [DEBUG] 1 workers
 [2019-05-15 08:27:04 +0000] [28823] [DEBUG] GET /app/li/
 [2019-05-15 08:27:10 +0000] [28823] [DEBUG] POST /app/new_page/
+[2019-05-15 17:28:31 +0900] [28820] [INFO] Handling signal: term
+[2019-05-15 08:28:31 +0000] [28823] [INFO] Worker exiting (pid: 28823)
+[2019-05-15 17:28:31 +0900] [28820] [INFO] Shutting down: Master
+[2019-05-15 17:28:31 +0900] [28845] [DEBUG] Current configuration:
+  config: gunicorn/conf.py
+  bind: ['127.0.0.1:8001']
+  backlog: 2048
+  workers: 1
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 600
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /var/www/projects/gcscraper.git/gcscraper
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 501
+  group: 501
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: gunicorn/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: gunicorn/error.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: gcscraper.wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7faba82b38c8>
+  on_reload: <function OnReload.on_reload at 0x7faba82b39d8>
+  when_ready: <function when_ready at 0x7faba82b1488>
+  pre_fork: <function pre_fork at 0x7faba82b1378>
+  post_fork: <function post_fork at 0x7faba82b12f0>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7faba82b3e18>
+  worker_int: <function worker_int at 0x7faba82b1510>
+  worker_abort: <function worker_abort at 0x7faba82b1598>
+  pre_exec: <function pre_exec at 0x7faba82b1400>
+  pre_request: <function PreRequest.pre_request at 0x7faba82c82f0>
+  post_request: <function PostRequest.post_request at 0x7faba82c8378>
+  child_exit: <function ChildExit.child_exit at 0x7faba82c8488>
+  worker_exit: <function WorkerExit.worker_exit at 0x7faba82c8598>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7faba82c86a8>
+  on_exit: <function OnExit.on_exit at 0x7faba82c87b8>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: TLSv1
+  raw_paste_global_conf: []
+[2019-05-15 17:28:31 +0900] [28845] [INFO] Starting gunicorn 19.9.0
+[2019-05-15 17:28:31 +0900] [28845] [DEBUG] Arbiter booted
+[2019-05-15 17:28:31 +0900] [28845] [INFO] Listening at: http://127.0.0.1:8001 (28845)
+[2019-05-15 17:28:31 +0900] [28845] [INFO] Using worker: sync
+[2019-05-15 17:28:31 +0900] [28845] [INFO] Server is ready. Spawning workers
+[2019-05-15 17:28:31 +0900] [28848] [INFO] Booting worker with pid: 28848
+[2019-05-15 17:28:31 +0900] [28848] [INFO] Worker spawned (pid: 28848)
+[2019-05-15 17:28:31 +0900] [28845] [DEBUG] 1 workers
+[2019-05-15 08:28:34 +0000] [28848] [DEBUG] GET /app/li/
+[2019-05-15 08:28:37 +0000] [28848] [DEBUG] POST /app/delete_page/
+[2019-05-15 08:28:39 +0000] [28848] [DEBUG] POST /app/new_page/
+[2019-05-15 08:28:45 +0000] [28848] [DEBUG] POST /app/update_page/
+[2019-05-15 08:28:46 +0000] [28848] [DEBUG] POST /app/update_page/
+[2019-05-15 08:28:47 +0000] [28848] [DEBUG] POST /app/update_page/
+[2019-05-15 08:28:48 +0000] [28848] [DEBUG] POST /app/update_page/
+[2019-05-15 08:28:49 +0000] [28848] [DEBUG] POST /app/update_page/
+[2019-05-15 08:28:50 +0000] [28848] [DEBUG] POST /app/update_page/
+[2019-05-15 08:28:53 +0000] [28848] [DEBUG] GET /app/li/
+[2019-05-15 17:32:58 +0900] [28845] [INFO] Handling signal: term
+[2019-05-15 08:32:58 +0000] [28848] [INFO] Worker exiting (pid: 28848)
+[2019-05-15 17:32:58 +0900] [28845] [INFO] Shutting down: Master
+[2019-05-15 17:32:58 +0900] [28856] [DEBUG] Current configuration:
+  config: gunicorn/conf.py
+  bind: ['127.0.0.1:8001']
+  backlog: 2048
+  workers: 1
+  worker_class: sync
+  threads: 1
+  worker_connections: 1000
+  max_requests: 0
+  max_requests_jitter: 0
+  timeout: 600
+  graceful_timeout: 30
+  keepalive: 2
+  limit_request_line: 4094
+  limit_request_fields: 100
+  limit_request_field_size: 8190
+  reload: False
+  reload_engine: auto
+  reload_extra_files: []
+  spew: False
+  check_config: False
+  preload_app: False
+  sendfile: None
+  reuse_port: False
+  chdir: /var/www/projects/gcscraper.git/gcscraper
+  daemon: False
+  raw_env: []
+  pidfile: None
+  worker_tmp_dir: None
+  user: 501
+  group: 501
+  umask: 0
+  initgroups: False
+  tmp_upload_dir: None
+  secure_scheme_headers: {'X-FORWARDED-PROTOCOL': 'ssl', 'X-FORWARDED-PROTO': 'https', 'X-FORWARDED-SSL': 'on'}
+  forwarded_allow_ips: ['127.0.0.1']
+  accesslog: gunicorn/access.log
+  disable_redirect_access_to_syslog: False
+  access_log_format: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+  errorlog: gunicorn/error.log
+  loglevel: debug
+  capture_output: False
+  logger_class: gunicorn.glogging.Logger
+  logconfig: None
+  logconfig_dict: {}
+  syslog_addr: udp://localhost:514
+  syslog: False
+  syslog_prefix: None
+  syslog_facility: user
+  enable_stdio_inheritance: False
+  statsd_host: None
+  statsd_prefix: 
+  proc_name: None
+  default_proc_name: gcscraper.wsgi:application
+  pythonpath: None
+  paste: None
+  on_starting: <function OnStarting.on_starting at 0x7fd091cef8c8>
+  on_reload: <function OnReload.on_reload at 0x7fd091cef9d8>
+  when_ready: <function when_ready at 0x7fd091ced488>
+  pre_fork: <function pre_fork at 0x7fd091ced378>
+  post_fork: <function post_fork at 0x7fd091ced2f0>
+  post_worker_init: <function PostWorkerInit.post_worker_init at 0x7fd091cefe18>
+  worker_int: <function worker_int at 0x7fd091ced510>
+  worker_abort: <function worker_abort at 0x7fd091ced598>
+  pre_exec: <function pre_exec at 0x7fd091ced400>
+  pre_request: <function PreRequest.pre_request at 0x7fd091d042f0>
+  post_request: <function PostRequest.post_request at 0x7fd091d04378>
+  child_exit: <function ChildExit.child_exit at 0x7fd091d04488>
+  worker_exit: <function WorkerExit.worker_exit at 0x7fd091d04598>
+  nworkers_changed: <function NumWorkersChanged.nworkers_changed at 0x7fd091d046a8>
+  on_exit: <function OnExit.on_exit at 0x7fd091d047b8>
+  proxy_protocol: False
+  proxy_allow_ips: ['127.0.0.1']
+  keyfile: None
+  certfile: None
+  ssl_version: 2
+  cert_reqs: 0
+  ca_certs: None
+  suppress_ragged_eofs: True
+  do_handshake_on_connect: False
+  ciphers: TLSv1
+  raw_paste_global_conf: []
+[2019-05-15 17:32:58 +0900] [28856] [INFO] Starting gunicorn 19.9.0
+[2019-05-15 17:32:58 +0900] [28856] [DEBUG] Arbiter booted
+[2019-05-15 17:32:58 +0900] [28856] [INFO] Listening at: http://127.0.0.1:8001 (28856)
+[2019-05-15 17:32:58 +0900] [28856] [INFO] Using worker: sync
+[2019-05-15 17:32:58 +0900] [28856] [INFO] Server is ready. Spawning workers
+[2019-05-15 17:32:58 +0900] [28859] [INFO] Booting worker with pid: 28859
+[2019-05-15 17:32:58 +0900] [28859] [INFO] Worker spawned (pid: 28859)
+[2019-05-15 17:32:59 +0900] [28856] [DEBUG] 1 workers
+[2019-05-15 08:33:01 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 09:26:57 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 09:26:57 +0000] [28859] [DEBUG] GET /app/
+[2019-05-15 09:26:59 +0000] [28859] [DEBUG] POST /app/
+[2019-05-15 09:27:00 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 09:27:05 +0000] [28859] [DEBUG] POST /app/new_page/
+[2019-05-15 09:27:18 +0000] [28859] [DEBUG] GET /app/g-li/
+[2019-05-15 09:27:22 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 09:27:28 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:28:36 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:29:46 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:29:55 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:30:02 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:24 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:28 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:35 +0000] [28859] [DEBUG] POST /app/new_page/
+[2019-05-15 09:39:39 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:43 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:46 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:49 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:50 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 09:39:59 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 10:37:37 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 10:37:42 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 10:37:43 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 10:37:43 +0000] [28859] [DEBUG] POST /app/new_page/
+[2019-05-15 10:37:47 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 10:37:50 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 10:37:50 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 10:37:51 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 10:38:31 +0000] [28859] [DEBUG] GET /app/g-li/
+[2019-05-15 10:38:34 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 11:47:38 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 11:47:41 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 11:47:42 +0000] [28859] [DEBUG] GET /app/g-li/
+[2019-05-15 11:47:45 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 11:47:56 +0000] [28859] [DEBUG] POST /app/new_page/
+[2019-05-15 11:47:57 +0000] [28859] [DEBUG] POST /app/new_page/
+[2019-05-15 11:47:58 +0000] [28859] [DEBUG] POST /app/new_page/
+[2019-05-15 11:48:00 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 11:48:02 +0000] [28859] [DEBUG] POST /app/delete_page/
+[2019-05-15 11:48:03 +0000] [28859] [DEBUG] POST /app/delete_page/
+[2019-05-15 11:48:04 +0000] [28859] [DEBUG] POST /app/delete_page/
+[2019-05-15 11:48:04 +0000] [28859] [DEBUG] POST /app/delete_page/
+[2019-05-15 11:48:05 +0000] [28859] [DEBUG] POST /app/delete_page/
+[2019-05-15 11:48:06 +0000] [28859] [DEBUG] POST /app/delete_page/
+[2019-05-15 12:14:00 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 12:14:07 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 12:14:12 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 12:14:14 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 12:14:16 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 12:14:19 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 12:16:38 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 12:50:35 +0000] [28859] [DEBUG] POST /app/update_page/
+[2019-05-15 13:02:47 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 13:02:55 +0000] [28859] [DEBUG] GET /app/g-li/
+[2019-05-15 13:02:57 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 13:52:01 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 14:17:30 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 15:03:02 +0000] [28859] [DEBUG] GET /app/li/
+[2019-05-15 15:03:02 +0000] [28859] [DEBUG] GET /app/
