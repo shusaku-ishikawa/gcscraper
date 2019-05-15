@@ -3,7 +3,7 @@
 {% block style %}
     <style>
         input {
-            width: 80%;
+            width: auto;
             height: 80%
         }
         input:read-only {
@@ -11,18 +11,10 @@
             background-color: transparent;
             color: gray;
         }
-        .add_above {
-            width: 100%;
-            height: 1px;
-        }
-        .add_below {
-            width: 100%;
-            height: 1px;
-        }
 
         th {
             height: 20px!important;
-            padding: 0.2rem !important;
+            padding: 0.1rem !important;
             font-size: 13px;
             background-color: gray!important;
             color: white;
@@ -34,9 +26,10 @@
             vertical-align: middle;
             text-align: center;
             height: 20px!important;
-            padding: 0.2rem!important;
-            font-size: 13px;
+            padding: 0.1rem!important;
+            font-size: 10px;
             border-right: white solid 0.5px;
+            /* white-space: nowrap!important; */
         }
         td:active {
             cursor: grabbing
@@ -50,6 +43,9 @@
         }
         td a {
             color:blue!important
+        }
+        input[name=company_code] {
+           width: 200px!important;
         }
         
     </style>
@@ -78,25 +74,25 @@
             {% for page in object_list %}
             <tr id="{{ page.pk }}" class="ui-state-default">
                 <td>
-                    <input readonly class="" type="text" value="{{ page.code }}">
+                    <input readonly name="code" type="text" value="{{ page.code }}">
                 </td>
                 <td>
-                    <input readonly class="" type="text" value="{{ page.comment|default_if_none:'-' }}">
+                    <input readonly name="comment" type="text" value="{{ page.comment|default_if_none:'-' }}">
                 </td>
                 <td>
-                    <input readonly class="" type="text" value="{{ page.company_name }}">
+                    <input readonly name="company_name" type="text" value="{{ page.company_name }}">
                 </td>
                 <td>
-                    <input readonly class="" type="text" value="{{ page.phone_number }}">
+                    <input readonly name="phone_number" type="text" value="{{ page.phone_number }}">
                 </td>
                 <td>
-                    <input type="checkbox" value="True" {% if page.is_callable %} checked="checked"{% endif %}>
+                    <input type="checkbox" name="is_callable" {% if page.is_callable %} checked="checked" {% endif %}>
                 </td>
                 <td>
-                    <a href="{{ page.page_url }}">{{ page.page_url }}</a>
+                    <input readonly name="page_url" type="text" value="{{ page.page_url }}">
                 </td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-danger">削除</button>
+                    <button type="button" class="btn btn-sm btn-danger delete-row-btn">削除</button>
                 </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-success add-row-btn">上に行追加</button>
@@ -118,6 +114,42 @@
         // function double_click_action($target) {
         //     $target.attr('readonly', false);
         // }
+        function create_empty_data(insert_at) {
+            return $.ajax({
+                url: "{% url 'main:new_page' %}",
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+                data: {
+                    insert_at: insert_at
+                },
+            });
+        }
+        function delete_page(pk) {
+            return $.ajax({
+                url: "{% url 'main:delete_page' %}",
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+                data: {
+                    pk: pk
+                },
+            });
+        }
+        function update_page(pk, field_name, field_value) {
+            return $.ajax({
+                url: "{% url 'main:update_page' %}",
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+                data: {
+                    pk: pk,
+                    field_name : field_name,
+                    field_value: field_value
+                },
+            });
+        }
+        
        $(function() {
             $( "#sortable" ).sortable({
                 update: function(event, ui) {
@@ -141,21 +173,91 @@
                 $(this).attr('readonly', false);
             })
             .on('focusout', 'input', function(event) {
-                $(this).attr('readonly', true);
+                var $this = $(this);
+                var pk = $(this).parent().parent().attr('id');
+                var field_name = $(this).attr('name');
+                if ($(this).attr('type') == 'checkbox') {
+                   
+                    var field_value = $(this).prop('checked');
+                } else {
+                    var field_value = $this.val();
+                }
+               
+                update_page(pk, field_name, field_value)
+                .done(function(res) {
+                    if (res.error) {
+                        alert(res.error);
+                        return;
+                    } else if (res.success) {
+                        $this.attr('readonly', true);
+                    } else {
+                        alert('else');
+                    }
+                })
+                .fail(function(data, textStatus, xhr) {
+                    if (data.status == 401) {
+                        window.location.href = BASE_URL_LOGIN;
+                    }
+                    
+                    alert('error');
+                });
+
             })
             .on('click', '.add-row-btn', function(event) {
-                var $newly_added = $('<tr>', { class: 'ui-state-default' })
-                .append($('<td>').append($('<input>', { type: 'text', class: 'code'  })))
-                .append($('<td>').append($('<input>', { type: 'text'  })))
-                .append($('<td>').append($('<input>', { type: 'text'  })))
-                .append($('<td>').append($('<input>', { type: 'text'  })))
-                .append($('<td>').append($('<input>', { type: 'checkbox'  })))
-                .append($('<td>').append($('<input>', { type: 'text'  })))
-                .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger', text: '削除'})))
-                .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-success add-row-btn', text: '上に行追加'})))
-                .insertBefore($(this).parent().parent());
-                $newly_added.find('.code').focus();
-            });
+                var insert_at = $(this).parent().parent().attr('id');
+                var $target = $(this).parent().parent();
+                create_empty_data(insert_at)
+                .done(function(res) {
+                    if (res.error) {
+                        alert(res.error);
+                        return;
+                    } else if (res.success) {
+                       
+                        console.log($(this));
+                        var $newly_added = $('<tr>', { class: 'ui-state-default', id: res.pk })
+                        .append($('<td>').append($('<input>', { type: 'text', class: 'code', name: 'code'  })))
+                        .append($('<td>').append($('<input>', { type: 'text', name: 'comment'  })))
+                        .append($('<td>').append($('<input>', { type: 'text', name: 'company_name'  })))
+                        .append($('<td>').append($('<input>', { type: 'text', name: 'phone_number'  })))
+                        .append($('<td>').append($('<input>', { type: 'checkbox', name: 'is_callable'  })))
+                        .append($('<td>').append($('<input>', { type: 'text', name: 'page_url'  })))
+                        .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger delete-row-btn', text: '削除'})))
+                        .append($('<td>').append($('<button>', { type: 'button', class: 'btn btn-sm btn-success add-row-btn', text: '上に行追加'})))
+                        .insertBefore($target);
+                        $newly_added.find('.code').dblclick();
+                    } else {
+                        alert('else');
+                    }
+                })
+                .fail(function(data, textStatus, xhr) {
+                    if (data.status == 401) {
+                        window.location.href = BASE_URL_LOGIN;
+                    }
+                    
+                    alert('error');
+                });
+            })
+            .on('click', '.delete-row-btn', function(event) {
+                $target = $(this).parent().parent();
+                delete_page($target.attr('id'))
+                .done(function(res) {
+                    if (res.error) {
+                        alert(res.error);
+                        return;
+                    } else if (res.success) {
+                        $target.remove();
+                    } else {
+                        alert('else');
+                    }
+                })
+                .fail(function(data, textStatus, xhr) {
+                    if (data.status == 401) {
+                        window.location.href = BASE_URL_LOGIN;
+                    }
+                    
+                    alert('error');
+                });
+            })
         });
         
     

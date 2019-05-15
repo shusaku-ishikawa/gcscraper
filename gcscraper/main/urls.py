@@ -15,6 +15,9 @@ urlpatterns = [
     path('top/', views.Top.as_view(), name="top"),
     path('li/', views.PageList.as_view(), name="page_list"),
     path('g-li/', views.GroupList.as_view(), name="group_list"),
-    path('logout/', LogoutView.as_view(), name='logout'),   
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('new_page/', views.create_blank_page_row, name="new_page"),
+    path('delete_page/', views.delete_page, name="delete_page"),
+    path('update_page/', views.update_page_field, name="update_page")
 ]
 
