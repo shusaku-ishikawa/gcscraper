@@ -18,6 +18,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('new_page/', views.create_blank_page_row, name="new_page"),
     path('delete_page/', views.delete_page, name="delete_page"),
-    path('update_page/', views.update_page_field, name="update_page")
+    path('update_page/', views.update_page_field, name="update_page"),
+    path('update_order/', views.update_order, name = 'update_order')
 ]
 

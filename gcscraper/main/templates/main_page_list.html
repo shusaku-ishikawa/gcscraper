@@ -107,13 +107,16 @@
 
 {% block extra_js %}
     <script>
-        //function()
-        // function click_action($target) {
-        //     alert('click action');
-        // }
-        // function double_click_action($target) {
-        //     $target.attr('readonly', false);
-        // }
+        function update_order(order_str) {
+            return $.ajax({
+                url: "{% url 'main:update_order' %}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    order_str: order_str
+                }
+            });
+        }
         function create_empty_data(insert_at) {
             return $.ajax({
                 url: "{% url 'main:new_page' %}",
@@ -153,10 +156,24 @@
        $(function() {
             $( "#sortable" ).sortable({
                 update: function(event, ui) {
-                    console.log(ui);
+                    
                     var updatedInfo =  $('#sortable').sortable("toArray").join(",");
-                    console.log(updatedInfo);
-                   
+                    update_order(updatedInfo)
+                    .done(function(res) {
+                        if (res.error) {
+                            alert(res.error);
+                            return false;
+                        } else if (res.success) {
+                            console.log('success');
+                        }
+
+                    })
+                    .fail(function(data, textStatus, xhr) {
+                        if (data.status == 401) {
+                            window.location.href = BASE_URL_LOGIN;
+                        }
+                        alert('error');
+                    });
                 }
             });
             $( "#sortable" ).disableSelection();
