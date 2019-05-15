@@ -61,3 +61,14 @@ def update_page_field(request):
         target.save()
         return JsonResponse({'success': True})
 
+def update_order(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+
+    if request.method == 'POST':
+        orderstr = request.POST.get('order_str')
+        order_list = orderstr.split(',')
+        for i in range(len(order_list)):
+            Page.objects.filter(pk = order_list[i]).update(display_order = i + 1)
+
+        return JsonResponse({'success': True})
