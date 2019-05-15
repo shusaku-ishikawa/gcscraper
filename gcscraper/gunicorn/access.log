@@ -688,3 +688,6 @@
 127.0.0.1 - - [15/May/2019:14:17:30 +0000] "GET /app/li/ HTTP/1.0" 200 70257 "http://160.16.146.14/app/g-li/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
 127.0.0.1 - - [15/May/2019:15:03:02 +0000] "GET /app/li/ HTTP/1.0" 302 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
 127.0.0.1 - - [15/May/2019:15:03:02 +0000] "GET /app/?next=/app/li/ HTTP/1.0" 200 1758 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
+127.0.0.1 - - [15/May/2019:15:04:15 +0000] "GET /app/?next=/app/li/ HTTP/1.0" 200 1758 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
+127.0.0.1 - - [15/May/2019:15:04:20 +0000] "POST /app/?next=/app/li/ HTTP/1.0" 302 0 "http://160.16.146.14/app/?next=/app/li/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
+127.0.0.1 - - [15/May/2019:15:04:20 +0000] "GET /app/li/ HTTP/1.0" 500 165924 "http://160.16.146.14/app/?next=/app/li/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
