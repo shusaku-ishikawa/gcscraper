@@ -70,7 +70,7 @@ def run():
             page.page_html = '取得失敗'
         
             
-        page.display_order = Page.objects.all().aggregate(Max('display_order'))['display_order__max'] + 1
+        page.display_order = (Page.objects.all().aggregate(Max('display_order'))['display_order__max'] or 0) + 1
         page.save()
         
 # BaseCommandを継承して作成

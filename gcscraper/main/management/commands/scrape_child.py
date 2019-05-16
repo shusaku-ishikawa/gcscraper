@@ -30,6 +30,8 @@ def run():
             # check if it's absolute path
             if re.match("^(http|https)://.*?$", link['href']):
                 absolute_path = link['href']
+            elif re.match("^javascript:.*", link['href']):
+                break
             else:
                 absolute_path = urljoin(parent.page_url, link['href'])
             print(absolute_path)
@@ -37,13 +39,15 @@ def run():
             if len(exist) > 0:
                 obj = exist[0]
             else:
-                obj = Page(page_url = link['href'], company_name = parent.company_name, parent = parent)
+                obj = Page(page_url = absolute_path, company_name = parent.company_name, parent = parent)
             page = requests.get(absolute_path).content
             page_parsed = BeautifulSoup(page, "html.parser")
             # scriptタグの除去
             for script in page_parsed.find_all('script', src=False):
                 script.decompose()
-            obj.page_html = page_parsed.find('body').getText()
+            body = page_parsed.find('body')
+            if body != None:
+                obj.page_html = body.getText()
             obj.display_order = Page.objects.all().aggregate(Max('display_order'))['display_order__max'] + 1
             obj.save()
             # except:
