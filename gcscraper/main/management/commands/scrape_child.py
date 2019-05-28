@@ -16,7 +16,7 @@ import re
 
 def run():
     #ベースページのURL
-    for parent in Page.objects.all():
+    for parent in CompanyHomePage.objects.all():
         #ベースページのHTMLソースを取得
        
         html = requests.get(parent.page_url)
@@ -35,11 +35,11 @@ def run():
             else:
                 absolute_path = urljoin(parent.page_url, link['href'])
             print(absolute_path)
-            exist = Page.objects.filter(page_url = absolute_path)
+            exist = CompanyHomePage.objects.filter(page_url = absolute_path)
             if len(exist) > 0:
                 obj = exist[0]
             else:
-                obj = Page(page_url = absolute_path, company_name = parent.company_name, parent = parent)
+                obj = CompanyHomePage(page_url = absolute_path, company_name = parent.company_name, parent = parent)
             page = requests.get(absolute_path).content
             page_parsed = BeautifulSoup(page, "html.parser")
             # scriptタグの除去
@@ -48,7 +48,7 @@ def run():
             body = page_parsed.find('body')
             if body != None:
                 obj.page_html = body.getText()
-            obj.display_order = Page.objects.all().aggregate(Max('display_order'))['display_order__max'] + 1
+            obj.display_order = CompanyHomePage.objects.all().aggregate(Max('display_order'))['display_order__max'] + 1
             obj.save()
             # except:
             #     print('error occurred')

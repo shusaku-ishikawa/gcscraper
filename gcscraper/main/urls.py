@@ -13,12 +13,16 @@ admin.site.index_title = 'Menu'
 urlpatterns = [
     path('', LoginView.as_view(template_name = 'admin/login.html'), name='login'),
     path('top/', views.Top.as_view(), name="top"),
-    path('li/', views.PageList.as_view(), name="page_list"),
+    path('li/', views.CompanyHomePageList.as_view(), name="page_list"),
     path('g-li/', views.GroupList.as_view(), name="group_list"),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('pages/', views.get_all_pages, name = 'get_all_pages'),
     path('new_page/', views.create_blank_page_row, name="new_page"),
     path('delete_page/', views.delete_page, name="delete_page"),
     path('update_page/', views.update_page_field, name="update_page"),
-    path('update_order/', views.update_order, name = 'update_order')
+    path('update_order/', views.update_order, name = 'update_order'),
+    path('add_to_group/', views.add_to_group, name = 'add_to_group'),
+    path('delete_from_group/', views.delete_from_group, name = 'delete_from_group'),
+    
 ]
 

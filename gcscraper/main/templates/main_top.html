@@ -1,11 +1,119 @@
 {% extends 'main_base.html' %}
 
+{% block style %}
+    <style>
+        input {
+            width: auto;
+            height: 80%
+        }
+        input:read-only {
+            border:none;
+            background-color: transparent;
+            color: gray;
+        }
+
+        th {
+            height: 20px!important;
+            padding: 0.1rem !important;
+            font-size: 13px;
+            background-color: gray!important;
+            color: white;
+            border-right: white solid 0.5px;
+        }
+        td {
+            /* border: gray solid 1px; */
+            cursor: grab;
+            vertical-align: middle;
+            text-align: center;
+            height: 20px!important;
+            padding: 0.1rem!important;
+            font-size: 10px;
+            border-right: white solid 0.5px;
+            /* white-space: nowrap!important; */
+        }
+        td:active {
+            cursor: grabbing
+        }
+        .btn {
+            font-size: 10px!important;
+        }
+        input.checkbox {
+            height: 100%;
+            width: 100%;
+        }
+        td a {
+            color:blue!important
+        }
+        input[name=company_code] {
+           width: 200px!important;
+        }
+        
+    </style>
+{% endblock %}
+
 {% block title %}
 検索
 {% endblock %}
 
 {% block content %}
-hello world
+
+<form method="GET">
+    <p>キーワードを全て含む</p>
+    <input type="text" name="group_keywords">
+    <button type="submit">グループ検索</button>
+</form>
+<form method="GET">
+        <p>キーワードいづれかを含む</p>
+        <input type="text" name="link_keywords">
+        <button type="submit">HP登録会社一覧</button> 
+</form>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>コード</th>
+            <th>補足</th>
+            <th>会社名</th>
+            <th>時価総額</th>
+            <th>電話番号</th>
+            <th>電話可能</th>
+            <th>URL</th>
+           
+        </tr>
+      
+    </thead>
+    <tbody id="sortable">
+            {% for page in object_list %}
+            <tr id="{{ page.pk }}" class="ui-state-default">
+                <td>
+                    <input readonly name="code" type="text" value="{{ page.code }}">
+                </td>
+                <td>
+                    <input readonly name="comment" type="text" value="{{ page.comment|default_if_none:'-' }}">
+                </td>
+                <td>
+                    <input readonly name="company_name" type="text" value="{{ page.company_name }}">
+                </td>
+                <td>
+                    <input readonly name="market_cap" type="number" value="{{ page.market_cap }}">
+                </td>
+                <td>
+                    <input readonly name="phone_number" type="text" value="{{ page.phone_number }}">
+                </td>
+                <td>
+                    <input type="checkbox" name="is_callable" {% if page.is_callable %} checked="checked" {% endif %}>
+                </td>
+                <td>
+                    <input readonly name="page_url" type="text" value="{{ page.page_url }}">
+                </td>
+                
+            </tr>
+            {% endfor %}
+    </tbody>
+
+</table>
 {% endblock %}
 
 

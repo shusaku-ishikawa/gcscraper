@@ -53,11 +53,11 @@ def run():
             for link in hp_links:
                 if link.getText() == '会社サイト':
                     print('hp:' + link['href'])
-                    exist = Page.objects.filter(page_url = link['href'])
+                    exist = CompanyHomePage.objects.filter(page_url = link['href'])
                     if len(exist) > 0:
                         page = exist[0]
                     else:
-                        page = Page(page_url = link['href'])
+                        page = CompanyHomePage(page_url = link['href'])
             page.code = company_code
             page.company_name = detail_page_link.getText()
             
@@ -66,11 +66,12 @@ def run():
                 script.decompose()
 
             page.page_html = parsed.find('body').getText()
-        except:
-            page.page_html = '取得失敗'
+        except Exception as e:
+            print(e.args)
+            pass
         
             
-        page.display_order = (Page.objects.all().aggregate(Max('display_order'))['display_order__max'] or 0) + 1
+        page.display_order = (CompanyHomePage.objects.all().aggregate(Max('display_order'))['display_order__max'] or 0) + 1
         page.save()
         
 # BaseCommandを継承して作成

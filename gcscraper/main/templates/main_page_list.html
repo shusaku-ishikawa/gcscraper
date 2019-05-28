@@ -2,11 +2,11 @@
 
 {% block style %}
     <style>
-        input {
+        input, textarea {
             width: auto;
             height: 80%
         }
-        input:read-only {
+        input:read-only, textarea:read-only {
             border:none;
             background-color: transparent;
             color: gray;
@@ -62,9 +62,11 @@
             <th>コード</th>
             <th>補足</th>
             <th>会社名</th>
+            <th>時価総額</th>
             <th>電話番号</th>
             <th>電話可能</th>
             <th>URL</th>
+            <th>メモ</th>
             <th>追加</th>
             <th>削除</th>
         </tr>
@@ -83,6 +85,9 @@
                     <input readonly name="company_name" type="text" value="{{ page.company_name }}">
                 </td>
                 <td>
+                    <input readonly name="market_cap" type="number" value="{{ page.market_cap }}">
+                </td>
+                <td>
                     <input readonly name="phone_number" type="text" value="{{ page.phone_number }}">
                 </td>
                 <td>
@@ -90,6 +95,9 @@
                 </td>
                 <td>
                     <input readonly name="page_url" type="text" value="{{ page.page_url }}">
+                </td>
+                <td>
+                    <textarea readonly name="memo" value="{{ page.memo }}"></textarea>
                 </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-success add-row-btn">追加</button>
@@ -185,6 +193,34 @@
 
            
             $(document)
+            .on('dblclick', 'textarea', function(event) {
+                $(this).attr('readonly', false);
+            })
+            .on('focusout', 'textarea', function(event) {
+                var $this = $(this);
+                var pk = $(this).parent().parent().attr('id');
+                var field_name = $(this).attr('name');
+                var field_value = $this.text();
+               
+                update_page(pk, field_name, field_value)
+                .done(function(res) {
+                    if (res.error) {
+                        alert(res.error);
+                        return;
+                    } else if (res.success) {
+                        $this.attr('readonly', true);
+                    } else {
+                        alert('else');
+                    }
+                })
+                .fail(function(data, textStatus, xhr) {
+                    if (data.status == 401) {
+                        window.location.href = BASE_URL_LOGIN;
+                    }
+                    
+                    alert('error');
+                });
+            })
             .on('dblclick', 'input', function(event) {
                 console.log(event.target);
                 $(this).attr('readonly', false);

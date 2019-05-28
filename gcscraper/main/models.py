@@ -9,25 +9,14 @@ class Group(models.Model):
         verbose_name = '表示順',
         default = 1,
     )
-    
-    
-class Page(models.Model):
-    parent = models.ForeignKey(
-        verbose_name = '親ページ',
-        to = 'self',
-        related_name = 'children',
-        null = True,
-        blank = True,
-        on_delete = models.SET_NULL
+    memo = models.TextField(
+        default = ""
     )
-    group = models.ForeignKey(
-        to = Group,
-        verbose_name = 'グループ',
-        on_delete = models.CASCADE,
-        related_name = 'pages',
-        blank = True,
-        null = True
-    )
+
+
+class CompanyHomePage(models.Model):
+
+
     page_url = models.URLField(
         verbose_name = "ページURL", 
         max_length=128, 
@@ -63,6 +52,12 @@ class Page(models.Model):
         null = True,
         default = ""
     )
+    market_cap = models.IntegerField(
+        verbose_name = '時価総額',
+        blank = True,
+        null = True,
+        default = 0,
+    )
     phone_number = models.CharField(
         verbose_name = '電話番号',
         max_length = 50,
@@ -77,4 +72,42 @@ class Page(models.Model):
         verbose_name = '表示順',
         default = 1
     )
+    memo = models.TextField(
+        default = ""
+    )
+
+class PageGroup(models.Model):
     
+    group = models.ForeignKey(
+        to = Group,
+        verbose_name = 'グループ',
+        on_delete = models.CASCADE,
+        related_name = 'pages',
+    )
+    page = models.ForeignKey(
+        to = CompanyHomePage,
+        on_delete = models.CASCADE,
+        related_name = 'groups',
+    )
+
+
+class LinkPage(models.Model):
+    parent = models.ForeignKey(
+        to = CompanyHomePage,
+        on_delete = models.CASCADE,
+        verbose_name = '親ページ',
+        related_name = 'links'
+    )
+    page_url = models.URLField(
+        verbose_name = "ページURL", 
+        max_length=128, 
+        blank = True,
+        null = True,
+        default = ""
+    )
+    page_html = models.TextField(
+        verbose_name = 'html',
+        blank = True,
+        null = True,
+        default = ""
+    )

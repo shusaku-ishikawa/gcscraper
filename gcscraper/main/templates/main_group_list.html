@@ -47,11 +47,13 @@
         .page-row {
             border: lightblue solid 1px;
             background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
-
         }
         input {
             width: 100%;
-            height: 100%
+            height: 100%;
+        }
+        .page-row input, .page-row a, .page-row button {
+            font-size: 12px !important;
         }
         input:read-only {
             border:none;
@@ -67,40 +69,99 @@
 
 {% block content %}
 <ul id="myUL">
-  {% for group in object_list %}
-  <li><span class="caret">{{ group.name }}</span>
-    <ul class="nested">
-      {% for page in group.pages.all %}
-      <li>
-        <div class="row page-row">
-            <div class="col-1"><input readonly class="" type="text" value="{{ page.code }}"></div>
-            <div class="col-2"><input readonly class="" type="text" value="{{ page.comment|default_if_none:'-' }}"></div>
-            <div class="col-2"><input readonly class="" type="text" value="{{ page.company_name }}"></div>
-            <div class="col-2"><input readonly class="" type="text" value="{{ page.phone_number }}"></div>
-            <div class="col-1">
-                <input type="checkbox" value="True" {% if page.is_callable %} checked="checked"{% endif %}>
+    {% for group in object_list %}
+    <li>
+        <span class="caret">{{ group.name }}</span>
+        <ul class="nested">
+        {% for page in group.pages.all %}
+            <li>
+                <div class="row page-row">
+                    <div class="col-2"><input readonly name="code" class="" type="text" value="{{ page.page.code }}"></div>
+                    <div class="col-1"><input readonly class="" type="text" value="{{ page.page.comment|default_if_none:'-' }}"></div>
+                    <div class="col-3"><input readonly class="" type="text" value="{{ page.page.company_name }}"></div>
+                    <div class="col-2"><input readonly class="" type="text" value="{{ page.page.phone_number }}"></div>
+                    <div class="col-1">
+                        <input type="checkbox" value="True" {% if page.page.is_callable %} checked="checked"{% endif %}>
+                    </div>
+                    <div class="col-2">
+                        <a href="{{ page.page.page_url }}">{{ page.page.page_url }}</a>
+                    </div>
+                    
+                    <div class="col-1">
+                        <button group_id="{{ group.pk }}" type="button" class="btn btn-sm btn-danger delete-from-group-btn">削除</button>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        <li>
+            <div class="row add-page-row">
+                <div class="col-4">
+                    <input type="text" name="code" autocomplete="on" list="{{ group.pk }}_candidates">
+                    <datalist id="{{ group.pk }}_candidates">
+                        <option>
+                            hoge
+                        </option>
+                        <option>
+                            hoge2
+                        </option>
+                    </datalist>
+                </div>
+                <div class="col-4">
+                    <button type="button" class="add-to-group-btn"  group_id="{{ group.pk }}">追加</button>
+                </div>
             </div>
-            <div class="col-2">
-                <a href="{{ page.page_url }}">{{ page.page_url }}</a>
-            </div>
-            <div class="col-2">
-                <button type="button" class="btn btn-sm btn-danger">削除</button>
-                <button type="button" class="btn btn-sm btn-success">更新</button>
-            </div>
-        </div>
-      </li>
-      {% endfor %}
-    </ul>
-  </li>
-  {% endfor %}
+        </li>
+        </ul>
+    </li>
+    {% endfor %}
 </ul>
 {% endblock %}
 
 {% block extra_js %}
     <script>
+        function get_all_pages() {
+            return $.ajax({
+                url: "{% url 'main:get_all_pages' %}",
+                type: 'GET',
+                dataType: 'json',
+                async: true,
+            });
+        }
+        function add_to_group(group_id, code) {
+            return $.ajax({
+                url: "{% url 'main:add_to_group' %}",
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+                data: {
+                    group_id: group_id,
+                    code: code
+                }
+            });
+        }
+        function delete_from_group(group_id, code) {
+            return $.ajax({
+                url: "{% url 'main:delete_from_group' %}",
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+                data: {
+                    group_id: group_id,
+                    code: code
+                }
+            });
+        }
+        var filter_left_match = function(prefix) {
+            return function(data) {
+                return data.code.indexOf(prefix) == 0;
+            }
+        }
         $(function() {
             var toggler = document.getElementsByClassName("caret");
             var i;
+
+            var all_pages;
+
 
             for (i = 0; i < toggler.length; i++) {
                 toggler[i].addEventListener("click", function() {
@@ -108,8 +169,90 @@
                     this.classList.toggle("caret-down");
                 });
             }
-        });
+            get_all_pages()
+            .done(function(data) {
+                all_pages = data;
+                console.log(all_pages);
+            })
+            .fail(function() {
+                alert('fail');
+            });
+
+            $(document)
+            .on('input', 'input', function(event) {
+                var $target = $(this).parent().parent().find('datalist');
+                $target.html('');
         
+                var li = all_pages.filter(filter_left_match($(this).val()));
+                li.forEach(element => {
+                    $('<option>', { text: element.code }).appendTo($target);
+                });
+                console.log(li);
+            })
+            .on('click', '.add-to-group-btn', function(event) {
+                var $this = $(this);
+                var group_id = $(this).attr('group_id');
+                var code = $(this).parent().parent().find('input').val();
+                add_to_group(group_id, code)
+                .done(function(data) {
+                    if (data.error) {
+                        alert('error');
+                        return;
+                    }
+                    var $new_data = $('<div>', { class: 'row page-row' });
+                    $('<div>', { class: 'col-2' })
+                    .append($('<input>', { type: 'text', name:"code", readonly: true, value: data.code })).appendTo($new_data);
+
+                    $('<div>', { class: 'col-1' })
+                    .append($('<input>', { type: 'text', readonly: true, value: data.comment })).appendTo($new_data);
+                    
+                    $('<div>', { class: 'col-3' })
+                    .append($('<input>', { type: 'text', readonly: true, value: data.company_name })).appendTo($new_data);
+                    
+                    $('<div>', { class: 'col-2' })
+                    .append($('<input>', { type: 'text', readonly: true, value: data.phone_number })).appendTo($new_data);
+                    
+                    if (data.is_callable == 'True') {
+                        $('<div>', { class: 'col-1' })
+                        .append($('<input>', { type: 'checkbox', checked: true})).appendTo($new_data);
+                    } else {
+                        $('<div>', { class: 'col-1' })
+                        .append($('<input>', { type: 'checkbox', checked: false})).appendTo($new_data);
+                    }
+                    $('<div>', { class: 'col-2' })
+                    .append($('<a>', { href: data.page_url, text: data.page_url })).appendTo($new_data);
+                    
+                    $('<div>', { class: 'col-1' })
+                    .append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger delete-from-group-btn', text: '削除' })).appendTo($new_data);
+                    
+                    $this.parent().parent().parent().prepend($new_data);
+                    
+                })
+                .fail(function() {
+
+                });
+            })
+            .on('click', '.delete-from-group-btn', function(event) {
+                var $this = $(this);
+                var group_id = $this.attr('group_id');
+                var $code = $this.parent().parent().find('input[name=code]').first();
+                console.log($code)
+                if ($code) {
+                    delete_from_group(group_id, $code.val())
+                    .done(function(data) {
+                        if (data.error) {
+                            alert('error');
+                            return;
+                        }
+                        $this.parent().parent().remove();
+
+                    })
+                } else {
+                    alert('no code')
+                }
+
+            })
+        });
     
     </script>
 {% endblock %}
