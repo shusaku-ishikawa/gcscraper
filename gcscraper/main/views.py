@@ -44,6 +44,9 @@ class CompanyHomePageList(LoginRequiredMixin, generic.ListView):
 class GroupList(LoginRequiredMixin, generic.ListView):
     model = Group
     template_name = 'main_group_list.html'
+    def get_queryset(self):
+        qs = Group.objects.all().order_by('display_order')
+        return qs
 
 def get_all_pages(request):
     if request.user.is_anonymous or request.user.is_active == False:
@@ -62,7 +65,7 @@ def delete_page(request):
         CompanyHomePage.objects.get(pk = request.POST.get('pk')).delete()
         return JsonResponse({'success': True})
      
-def create_blank_page_row(request):
+def add_new_page(request):
     if request.user.is_anonymous or request.user.is_active == False:
         return JsonResponse({'error' : 'authentication failed'}, status=401)
 
@@ -75,7 +78,8 @@ def create_blank_page_row(request):
         # update following rows
         CompanyHomePage.objects.filter(display_order__gte = after.display_order + 1).update(display_order = F("display_order") + 1)
         new_page.save()
-        return JsonResponse({'success': True, 'pk': new_page.pk})
+        data = PageSerializer(new_page, many = False).data
+        return JsonResponse(data)
 
 def update_page_field(request):
     if request.user.is_anonymous or request.user.is_active == False:
@@ -107,6 +111,50 @@ def update_order(request):
 
         return JsonResponse({'success': True})
 
+def update_group_memo(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+
+    if request.method == 'POST':
+        group_id = request.POST.get('group_id')
+        memo = request.POST.get('memo')
+        print(memo)
+
+        group = Group.objects.get(pk = group_id)
+        group.memo = memo
+        group.save()
+
+        return JsonResponse({'success': True})
+
+def update_group_page_order(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+
+    if request.method == 'POST':
+        group_id = request.POST.get('group_id')
+        group = Group.objects.get(pk = group_id)
+        new_order = request.POST.get('new_order')
+        print(new_order)
+        order_list = new_order.split(',')
+        for i in range(len(order_list)):
+            PageGroup.objects.filter(pk = order_list[i]).update(display_order = i + 1)
+
+        return JsonResponse({'success': True})
+
+def update_group_order(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+
+    if request.method == 'POST':
+        new_order = request.POST.get('new_order')
+        print(new_order)
+        order_list = new_order.split(',')
+        for i in range(len(order_list)):
+            Group.objects.filter(pk = order_list[i]).update(display_order = i + 1)
+
+        return JsonResponse({'success': True})
+
+
 def add_to_group(request):
     if request.user.is_anonymous or request.user.is_active == False:
         return JsonResponse({'error' : 'authentication failed'}, status=401)
@@ -126,42 +174,95 @@ def add_to_group(request):
         
         exist = PageGroup.objects.filter(group = group, page = page)
         if len(exist) > 0:
-            return JsonResponse({'error':True})
+            print(code)
+            return JsonResponse({'error':'既に登録されています'})
         pagegroup = PageGroup(group = group, page = page)
         pagegroup.save()
 
-        data = PageSerializer(page, many = False).data
+        data = PageGroupSerializer(pagegroup, many = False).data
         return JsonResponse(data)
         
-        
-def delete_from_group(request):
+def add_group_memo(request):
     if request.user.is_anonymous or request.user.is_active == False:
         return JsonResponse({'error' : 'authentication failed'}, status=401)
     
     if request.method == 'POST':
         group_id = request.POST.get('group_id')
-        code = request.POST.get('code')
-        if group_id == None or code == None:
+        memo = request.POST.get('memo')
+        if group_id == None or memo == None:
+            return JsonResponse({'error': True});
+        group = Group.objects.get(pk = group_id)
+
+        pagegroup = PageGroup(group = group, memo = memo, page_or_comment = PageGroupOrMemo.MEMO)
+        pagegroup.save()
+        
+
+        data = PageGroupSerializer(pagegroup, many = False).data
+        return JsonResponse(data)
+
+def delete_from_group(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+    
+    if request.method == 'POST':
+        id = request.POST.get('pagegroup_id')
+        
+        if id == None:
             print('no parma')
             return JsonResponse({'error': True});
         
         try:
-            group = Group.objects.get(pk = group_id)
-            page = CompanyHomePage.objects.get(code = code)
+            page_or_memo = PageGroup.objects.get(pk = id)
+            page_or_memo.delete()
         except Exception as e:
             print(str(e.args))
             return JsonResponse({'error': str(e.args)})
         
-        exist = PageGroup.objects.filter(group = group, page = page)
-        if len(exist) == 0:
-            print('no exist')
-            return JsonResponse({'error':True})
-        
-        for rec in exist:
-            rec.delete()
-
         return JsonResponse({'success': True})
+
+def delete_group(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+    
+    if request.method == 'POST':
+        id = request.POST.get('group_id')
+    
+        Group.objects.get(pk = id).delete()
+        return JsonResponse({'success': True})
+
+def add_new_group(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+    
+    if request.method == 'POST':
+        after = Group.objects.get(pk = request.POST.get('after'))
         
+        new_group = Group(display_order = after.display_order + 1)
+        new_group.save()
+
+        Group.objects.filter(display_order__gte = after.display_order + 1).update(display_order = F("display_order") + 1)
+
+        data = GroupSerializer(new_group, many = False).data        
+        return JsonResponse(data)
+
+def update_group_field(request):
+    if request.user.is_anonymous or request.user.is_active == False:
+        return JsonResponse({'error' : 'authentication failed'}, status=401)
+
+    if request.method == 'POST':
         
+        group_id = request.POST.get('group_id')
+        field_name = request.POST.get('field_name')
+        field_value = request.POST.get('field_value')
+
+        if field_value in ('true', 'false'):
+            field_value = field_value == 'true'
+            
+
+        target = Group.objects.get(pk = group_id)
+        setattr(target, field_name, field_value)
+        target.save()
+        return JsonResponse({'success': True})
+
 
 

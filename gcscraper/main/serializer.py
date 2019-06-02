@@ -14,5 +14,11 @@ class PageSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CompanyHomePage
-        fields = ('page_url', 'page_html', 'code', 'comment', 'company_name', 'market_cap', 'phone_number', 'is_callable', 'display_order', 'memo')
+        fields = ('pk', 'page_url', 'page_html', 'code', 'comment', 'company_name', 'market_cap', 'phone_number', 'is_callable', 'display_order')
 
+class PageGroupSerializer(serializers.ModelSerializer):
+    group = GroupSerializer(read_only = True, many = False)
+    page = PageSerializer(read_only = True, many = False)
+    class Meta:
+        model = PageGroup
+        fields = ('pk', 'group', 'page')

@@ -3,7 +3,12 @@
 {% block style %}
     <style>
         li {
-            text-align: left
+            text-align: left;
+            cursor: grab;
+            margin-bottom: 2px;;
+        }
+        li:active {
+            cursor: grabbing
         }
         /* Remove default bullets */
         ul, #myUL {
@@ -17,13 +22,13 @@
         }
 
         /* Style the caret/arrow */
-        .caret {
+        .caret, .caret-2 {
             cursor: pointer; 
             user-select: none; /* Prevent text selection */
         }
 
         /* Create the caret/arrow with a unicode, and style it */
-        .caret::before {
+        .caret::before, .caret-2::before {
             content: "\25B6";
             color: black;
             display: inline-block;
@@ -31,35 +36,96 @@
         }
 
         /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
-        .caret-down::before {
+        .caret-down::before, .caret-2-down::before {
             transform: rotate(90deg); 
         }
 
-        /* Hide the nested list */
-        .nested {
+        .hide, .hide-2 {
             display: none;
         }
+        /* Hide the nested list */
+        /* .nested-p {
+            display: none;
+        } */
 
         /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
         .active {
             display: block;
         }
+
         .page-row {
             border: lightblue solid 1px;
             background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
         }
-        input {
-            width: 100%;
-            height: 100%;
+        input.code_input {
+            width: 300px;;
+            margin-top: 0.5rem;
+            margin-left: 3rem;
+            margin-right: 0.2rem;
+            height:30px;
+        }
+
+
+        .col-1, .col-2, .col-3, .col-4, .col-5 {
+            padding: 5px!important;
+            vertical-align: middle;
+        }
+
+        button.add-to-group-btn {
+            height: 30px;
+            margin-top: 0.5rem;
         }
         .page-row input, .page-row a, .page-row button {
             font-size: 12px !important;
+        }
+        div input {
+            width: 100%;  
         }
         input:read-only {
             border:none;
             background-color: transparent;
             color: gray;
         }
+        textarea[name="memo"] {
+            width: 100%;
+            height: 100%;
+            
+        }
+        textarea:read-only {
+            background-color: transparent;
+            color:gray;
+            border:gray solid 1px;
+            background-color: lightgray;   
+        }
+
+        .group_memo {
+            margin-left: 1.5rem;
+        }
+        .group_memo_area, .page_memo_area {
+            width: 100%;
+            height: 100px;
+        }
+        .delete-from-group-btn {
+            padding: 0!important;
+            margin:0!important;
+        }
+        .add-group-btn {
+            background-color: teal;
+            color:white;
+            padding:0;
+        }
+        .delete-group-btn {
+            background-color: red;
+            color:white;
+            padding:0;
+        }
+        .group-row {
+            margin-left: 1rem;
+        }
+        .group-row div {
+            background-color: lightgreen;
+        }
+        
     </style>
 {% endblock %}
 
@@ -68,107 +134,111 @@
 {% endblock %}
 
 {% block content %}
-<ul id="myUL">
+<ul class="nested-g" id="myUL">
     {% for group in object_list %}
-    <li>
-        <span class="caret">{{ group.name }}</span>
-        <ul class="nested">
-        {% for page in group.pages.all %}
-            <li>
-                <div class="row page-row">
-                    <div class="col-2"><input readonly name="code" class="" type="text" value="{{ page.page.code }}"></div>
-                    <div class="col-1"><input readonly class="" type="text" value="{{ page.page.comment|default_if_none:'-' }}"></div>
-                    <div class="col-3"><input readonly class="" type="text" value="{{ page.page.company_name }}"></div>
-                    <div class="col-2"><input readonly class="" type="text" value="{{ page.page.phone_number }}"></div>
-                    <div class="col-1">
-                        <input type="checkbox" value="True" {% if page.page.is_callable %} checked="checked"{% endif %}>
-                    </div>
-                    <div class="col-2">
-                        <a href="{{ page.page.page_url }}">{{ page.page.page_url }}</a>
-                    </div>
-                    
-                    <div class="col-1">
-                        <button group_id="{{ group.pk }}" type="button" class="btn btn-sm btn-danger delete-from-group-btn">削除</button>
-                    </div>
-                </div>
-            </li>
-        {% endfor %}
-        <li>
-            <div class="row add-page-row">
-                <div class="col-4">
-                    <input type="text" name="code" autocomplete="on" list="{{ group.pk }}_candidates">
-                    <datalist id="{{ group.pk }}_candidates">
-                        <option>
-                            hoge
-                        </option>
-                        <option>
-                            hoge2
-                        </option>
-                    </datalist>
-                </div>
-                <div class="col-4">
-                    <button type="button" class="add-to-group-btn"  group_id="{{ group.pk }}">追加</button>
+    <li class="group-li" id="{{ group.pk }}">
+        <div class="row group-row">
+            <div class="col-1">
+                <span class="caret"></span>
+            </div>
+            <div class="col-5">
+                <input model="group" field_name="name" type="text" readonly value="{{ group.name }}">
+            </div>
+            <div class="col-1 text-center">
+                <button type="button" class="btn add-group-btn">追加</button>
+            </div>            
+            <div class="col-1 text-center">
+                <button type="button" class="btn delete-group-btn">削除</button>
+            </div>
+        </div>
+        
+        <div class="hide">
+            <div class="group_memo">
+                <span class="caret-2">メモ</span>
+                <div class="hide-2">
+                    <textarea readonly class="group_memo_area">{{ group.memo }}</textarea>
                 </div>
             </div>
-        </li>
-        </ul>
+            <ul class="nested-p">
+            {% for pagegroup in group.pages.all %}
+                <li class="pagegroup-li" id="{{ pagegroup.pk }}">
+                    <div class="row page-row">
+                        <div class="col-1">   
+                            <span class="caret-2"></span>
+                        </div>
+                  
+                        <div class="col-2">
+                            <input style="width:65%; display:inline-block" readonly name="code" class="" type="text" value="{{ pagegroup.page.code }}">
+                            <input style="width:30%; display:inline-block"  readonly class="" type="text" value="{{ pagegroup.page.comment|default_if_none:'-' }}">
+                        </div>
+                        
+                        <div class="col-4">
+                            <input readonly class="" type="text" value="{{ pagegroup.page.company_name }}">
+                        </div>
+                        
+                        <div class="col-1"><input readonly class="" type="text" value="{{ pagegroup.page.market_cap }}"></div>
+                         
+                        <div class="col-3">
+                            <a href="{{ pagegroup.page.page_url }}">{{ pagegroup.page.page_url }}</a>
+                        </div>
+                        
+                        <div class="col-1 text-right" >
+                            <button pagegroup_id="{{ pagegroup.pk }}" type="button" class="btn btn-sm btn-danger delete-from-group-btn">削除</button>
+                        </div>
+
+                        <div class="col-12 memo_row hide-2">
+                            <textarea readonly page_id="{{ pagegroup.page.pk }}" class="page_memo_area">{{ pagegroup.page.memo }}</textarea>
+                        </div>
+                    </div>
+                   
+                </li>
+            {% endfor %}
+            </ul>
+            <div class="row add-page-row">
+                <input class="code_input" type="text" name="code" autocomplete="on" list="{{ group.pk }}_candidates">
+                <datalist id="{{ group.pk }}_candidates"></datalist>
+                <button type="button" class="add-to-group-btn" >会社追加</button>
+            </div>
+        </div>
     </li>
     {% endfor %}
 </ul>
 {% endblock %}
 
 {% block extra_js %}
+   
     <script>
-        function get_all_pages() {
-            return $.ajax({
-                url: "{% url 'main:get_all_pages' %}",
-                type: 'GET',
-                dataType: 'json',
-                async: true,
-            });
-        }
-        function add_to_group(group_id, code) {
-            return $.ajax({
-                url: "{% url 'main:add_to_group' %}",
-                type: 'POST',
-                dataType: 'json',
-                async: true,
-                data: {
-                    group_id: group_id,
-                    code: code
-                }
-            });
-        }
-        function delete_from_group(group_id, code) {
-            return $.ajax({
-                url: "{% url 'main:delete_from_group' %}",
-                type: 'POST',
-                dataType: 'json',
-                async: true,
-                data: {
-                    group_id: group_id,
-                    code: code
-                }
-            });
-        }
         var filter_left_match = function(prefix) {
             return function(data) {
                 return data.code.indexOf(prefix) == 0;
             }
         }
         $(function() {
-            var toggler = document.getElementsByClassName("caret");
-            var i;
+            var $togglers = $(".caret");
+            var $togglers_2 = $('.caret-2');
+
+            $togglers.each(function(index, elem) {
+                $(elem).on('click', function() {
+                    $(this).closest('li.group-li').find('.hide').toggleClass('active');
+                    $(this).toggleClass('caret-down')
+                });
+            });
+
+            $togglers_2.each(function(index, elem) {
+                $(elem).on('click', function() {
+                    if ($(this).parent().hasClass('group_memo')) {
+                        $(this).parent().children('.hide-2').toggleClass('active');
+                        $(this).toggleClass('caret-2-down')
+                    } else {    
+                        $(this).parent().parent().children('.hide-2').toggleClass('active');
+                        $(this).toggleClass('caret-2-down');
+                    }
+                    
+                });
+            });
 
             var all_pages;
 
-
-            for (i = 0; i < toggler.length; i++) {
-                toggler[i].addEventListener("click", function() {
-                    this.parentElement.querySelector(".nested").classList.toggle("active");
-                    this.classList.toggle("caret-down");
-                });
-            }
             get_all_pages()
             .done(function(data) {
                 all_pages = data;
@@ -180,7 +250,7 @@
 
             $(document)
             .on('input', 'input', function(event) {
-                var $target = $(this).parent().parent().find('datalist');
+                var $target = $(this).parent().find('datalist');
                 $target.html('');
         
                 var li = all_pages.filter(filter_left_match($(this).val()));
@@ -189,69 +259,175 @@
                 });
                 console.log(li);
             })
+            .on('dblclick', 'textarea.group_memo_area', function(event) {
+                $(this).attr('readonly', false);
+
+            })
+            .on('focusout', 'textarea.group_memo_area', function(event) {
+                var $this = $(this);
+                var group_id = $(this).closest('li.group-li').attr('id');
+                var memo = $(this).val();
+                console.log(memo);
+                update_group_memo(group_id, memo)
+                .done(function(data) {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    $this.attr('readonly', true);
+                })
+                .fail(function() {
+                    alert('error');
+                })
+            })
+            .on('dblclick', 'textarea.page_memo_area', function(event) {
+                $(this).attr('readonly', false);
+
+            })
+            .on('focusout', 'textarea.page_memo_area', function(event) {
+                var $this = $(this);
+                var page_id = $(this).attr('page_id');
+                var memo = $(this).val();
+                console.log(memo);
+                update_page_field(page_id, 'memo', memo)
+                .done(function(data) {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    $this.attr('readonly', true);
+                })
+                .fail(function() {
+                    alert('error');
+                })
+            })
             .on('click', '.add-to-group-btn', function(event) {
                 var $this = $(this);
-                var group_id = $(this).attr('group_id');
-                var code = $(this).parent().parent().find('input').val();
+                var group_id = $(this).closest('li.group-li').attr('id');
+                var code = $(this).parent().find('input').eq(0).val();
                 add_to_group(group_id, code)
+                .done(function(data) {
+                    if (data.error) {
+                        alert(data.error);
+                        alert('error');
+                        return;
+                    }
+                    var $new_data = $('<div>', { class: 'row page-row' });
+                    $('<div>', { class: 'col-1' })
+                    .append($('<span>', { class: 'caret-2' }))
+                    .appendTo($new_data);
+
+                    $('<div>', { class: 'col-2' })
+                    .append($('<input>', { type: 'text', style: 'width:65%; display:inline-block', name:"code", readonly: true, value: data.page.code }))
+                    .append($('<input>', { type: 'text', style: 'width:30%; display:inline-block', name:"comment", readonly: true, value: data.page.comment }))
+                    .appendTo($new_data);
+
+                    $('<div>', { class: 'col-4' })
+                    .append($('<input>', { type: 'text', readonly: true, value: data.page.company_name })).appendTo($new_data);
+                    
+                    $('<div>', { class: 'col-1' })
+                    .append($('<input>', { type: 'text', readonly: true, value: data.page.market_cap })).appendTo($new_data);
+                    
+                    $('<div>', { class: 'col-3' })
+                    .append($('<a>', { href: data.page.page_url, text: data.page.page_url })).appendTo($new_data);
+                    
+                    $('<div>', { class: 'col-1 text-right' })
+                    .append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger delete-from-group-btn', text: '削除' })).appendTo($new_data);
+                    console.log($new_data);
+                    console.log($this.closest('.nested-p'));
+                    
+                    $('<li>', { class: 'pagegroup-li', id: data.pk }).append($new_data).appendTo($this.closest('.hide').find('.nested-p'));
+                    init_pagegroup_sortable();
+
+                })
+                .fail(function() {
+                    alert('error');
+                });
+            })
+            .on('click', '.delete-from-group-btn', function(event) {
+                var $this = $(this);
+                var pagegroup_id = $this.attr('pagegroup_id');
+                
+                console.log(pagegroup_id)
+                delete_from_group(pagegroup_id)
                 .done(function(data) {
                     if (data.error) {
                         alert('error');
                         return;
                     }
-                    var $new_data = $('<div>', { class: 'row page-row' });
-                    $('<div>', { class: 'col-2' })
-                    .append($('<input>', { type: 'text', name:"code", readonly: true, value: data.code })).appendTo($new_data);
+                    $this.parent().parent().remove();
 
-                    $('<div>', { class: 'col-1' })
-                    .append($('<input>', { type: 'text', readonly: true, value: data.comment })).appendTo($new_data);
-                    
-                    $('<div>', { class: 'col-3' })
-                    .append($('<input>', { type: 'text', readonly: true, value: data.company_name })).appendTo($new_data);
-                    
-                    $('<div>', { class: 'col-2' })
-                    .append($('<input>', { type: 'text', readonly: true, value: data.phone_number })).appendTo($new_data);
-                    
-                    if (data.is_callable == 'True') {
-                        $('<div>', { class: 'col-1' })
-                        .append($('<input>', { type: 'checkbox', checked: true})).appendTo($new_data);
-                    } else {
-                        $('<div>', { class: 'col-1' })
-                        .append($('<input>', { type: 'checkbox', checked: false})).appendTo($new_data);
+                })
+            })
+            .on('click', '.add-group-btn', function(evnet) {
+                var after = $(this).closest('li.group-li').attr('id');
+                var $this = $(this);
+                add_new_group(after)
+                .done(function(data) {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
                     }
-                    $('<div>', { class: 'col-2' })
-                    .append($('<a>', { href: data.page_url, text: data.page_url })).appendTo($new_data);
-                    
-                    $('<div>', { class: 'col-1' })
-                    .append($('<button>', { type: 'button', class: 'btn btn-sm btn-danger delete-from-group-btn', text: '削除' })).appendTo($new_data);
-                    
-                    $this.parent().parent().parent().prepend($new_data);
-                    
+                    var $new_group_row = $('<div>', { class:'row group-row' })
+                    .append($('<div>', { class: 'col-1' }).append($('<span>', { class: 'caret' })))
+                    .append($('<div>', { class: 'col-5' }).append($('<input>', { type: 'text', readonly: true, value: data.name, model: 'group' })))
+                    .append($('<div>', { class: 'col-1 text-center' }).append($('<button>', { type: 'button', class:'btn add-group-btn', text: '追加', group_id: data.pk })))
+                    .append($('<div>', { class: 'col-1 text-center' }).append($('<button>', { type: 'button', class:'btn delete-group-btn', text: '削除', group_id: data.pk })))
+                    var $new_grouppage_div = $('<div>', { class: 'hide' })
+                    .append($('<div>', { class: 'group_memo' })
+                        .append($('<span>', { class:'caret-2', text: 'メモ' }))
+                        .append($('<div>', { class:'hide-2' })
+                            .append($('<textarea>', { group_id: data.pk, readonly:true, class: 'group_memo_area' }))))
+                    .append($('<ul>', { class: 'nested', id: data.pk }));
+
+                    $('<li>', { class: 'group-li', id: data.pk })
+                    .append($new_group_row)
+                    .append($new_grouppage_div)
+                    .insertAfter($this.closest('li'));
+                    console.log('here');
+                    init_group_sortable();
+                        
                 })
                 .fail(function() {
-
-                });
+                    alert('fail');
+                })
             })
-            .on('click', '.delete-from-group-btn', function(event) {
+            .on('click', '.delete-group-btn', function(event) {
                 var $this = $(this);
-                var group_id = $this.attr('group_id');
-                var $code = $this.parent().parent().find('input[name=code]').first();
-                console.log($code)
-                if ($code) {
-                    delete_from_group(group_id, $code.val())
-                    .done(function(data) {
-                        if (data.error) {
-                            alert('error');
-                            return;
-                        }
-                        $this.parent().parent().remove();
-
-                    })
-                } else {
-                    alert('no code')
-                }
+                var group_id = $(this).closest('li.group-li').attr('id');
+                delete_group(group_id)
+                .done(function(data) {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    $this.closest('.group-li').remove();
+                })
 
             })
+            .on('dblclick', 'input', function(event) {
+                $(this).attr('readonly', false);
+            })
+            .on('focusout', 'input[model="group"]', function(event) {
+                var $this = $(this);
+                var group_id = $(this).closest('li.group-li').attr('id');
+                var field_name = $(this).attr('field_name');
+                var field_value = $(this).val();
+                update_group_field(group_id, field_name, field_value)
+                .done(function(data) {
+                    if(data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    $this.attr('readonly',true);
+                })
+                .fail(function() {
+                    alert('error');
+                })
+            })
+            init_group_sortable();
+            init_pagegroup_sortable();
+
         });
     
     </script>

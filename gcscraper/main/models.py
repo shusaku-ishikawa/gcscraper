@@ -3,7 +3,9 @@ from django.db import models
 class Group(models.Model):
     name = models.CharField(
         verbose_name = '名前',
-        max_length = 100
+        max_length = 100,
+        blank = True,
+        default = ''
     )
     display_order = models.IntegerField(
         verbose_name = '表示順',
@@ -73,21 +75,31 @@ class CompanyHomePage(models.Model):
         default = 1
     )
     memo = models.TextField(
-        default = ""
+        verbose_name = 'メモ',
+        default = ''
     )
 
+
 class PageGroup(models.Model):
-    
+    class Meta:
+        ordering = ['display_order']
     group = models.ForeignKey(
         to = Group,
         verbose_name = 'グループ',
         on_delete = models.CASCADE,
         related_name = 'pages',
     )
+
     page = models.ForeignKey(
         to = CompanyHomePage,
+        null = True,
         on_delete = models.CASCADE,
         related_name = 'groups',
+    )
+
+    display_order = models.IntegerField(
+        verbose_name = '表示順',
+        default = 1
     )
 
 
