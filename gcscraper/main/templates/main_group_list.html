@@ -22,13 +22,13 @@
         }
 
         /* Style the caret/arrow */
-        .caret, .caret-2 {
+        .caret, .caret-2, .caret-3 {
             cursor: pointer; 
             user-select: none; /* Prevent text selection */
         }
 
         /* Create the caret/arrow with a unicode, and style it */
-        .caret::before, .caret-2::before {
+        .caret::before, .caret-2::before, .caret-3::before {
             content: "\25B6";
             color: black;
             display: inline-block;
@@ -36,11 +36,11 @@
         }
 
         /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
-        .caret-down::before, .caret-2-down::before {
+        .caret-down::before, .caret-2-down::before, .caret-3-down::before {
             transform: rotate(90deg); 
         }
 
-        .hide, .hide-2 {
+        .hide, .hide-2, .hide-3 {
             display: none;
         }
         /* Hide the nested list */
@@ -164,7 +164,7 @@
                 <li class="pagegroup-li" id="{{ pagegroup.pk }}">
                     <div class="row page-row">
                         <div class="col-1">   
-                            <span class="caret-2"></span>
+                            <span class="caret-3"></span>
                         </div>
                   
                         <div class="col-2">
@@ -186,7 +186,7 @@
                             <button pagegroup_id="{{ pagegroup.pk }}" type="button" class="btn btn-sm btn-danger delete-from-group-btn">削除</button>
                         </div>
 
-                        <div class="col-12 memo_row hide-2">
+                        <div class="col-12 memo_row hide-3">
                             <textarea readonly page_id="{{ pagegroup.page.pk }}" class="page_memo_area">{{ pagegroup.page.memo }}</textarea>
                         </div>
                     </div>
@@ -216,7 +216,7 @@
         $(function() {
             var $togglers = $(".caret");
             var $togglers_2 = $('.caret-2');
-
+            var $togglers_3 = $('.caret-3');
             $togglers.each(function(index, elem) {
                 $(elem).on('click', function() {
                     $(this).closest('li.group-li').find('.hide').toggleClass('active');
@@ -226,14 +226,15 @@
 
             $togglers_2.each(function(index, elem) {
                 $(elem).on('click', function() {
-                    if ($(this).parent().hasClass('group_memo')) {
-                        $(this).parent().children('.hide-2').toggleClass('active');
-                        $(this).toggleClass('caret-2-down')
-                    } else {    
-                        $(this).parent().parent().children('.hide-2').toggleClass('active');
-                        $(this).toggleClass('caret-2-down');
-                    }
-                    
+                    $(this).closest('div.group_memo').find('.hide-2').toggleClass('active');
+                    $(this).toggleClass('caret-2-down');
+                });
+            });
+            $togglers_3.each(function(index, elem) {
+                $(elem).on('click', function() {
+                    $(this).closest('li.pagegroup-li').find('.hide-3').toggleClass('active');
+                    $(this).toggleClass('caret-3-down');
+                
                 });
             });
 

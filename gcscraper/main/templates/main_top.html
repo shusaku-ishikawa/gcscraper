@@ -2,51 +2,32 @@
 
 {% block style %}
     <style>
-        input {
-            width: auto;
-            height: 80%
+        input.search {
+            width: 100%
+        }
+        input[type="submit"] {
+            margin: 2rem 0;
         }
         input:read-only {
             border:none;
             background-color: transparent;
             color: gray;
         }
+        a {
+            font-size: 14px!important;
+            margin: 1.7rem 0
+        }
+        form {
+            text-align: left
+        }
+        div.container {
+            padding: 0!important;
+           
+        }
+        .new_page_form input {
+            width: 100%
+        }
 
-        th {
-            height: 20px!important;
-            padding: 0.1rem !important;
-            font-size: 13px;
-            background-color: gray!important;
-            color: white;
-            border-right: white solid 0.5px;
-        }
-        td {
-            /* border: gray solid 1px; */
-            cursor: grab;
-            vertical-align: middle;
-            text-align: center;
-            height: 20px!important;
-            padding: 0.1rem!important;
-            font-size: 10px;
-            border-right: white solid 0.5px;
-            /* white-space: nowrap!important; */
-        }
-        td:active {
-            cursor: grabbing
-        }
-        .btn {
-            font-size: 10px!important;
-        }
-        input.checkbox {
-            height: 100%;
-            width: 100%;
-        }
-        td a {
-            color:blue!important
-        }
-        input[name=company_code] {
-           width: 200px!important;
-        }
         
     </style>
 {% endblock %}
@@ -57,63 +38,68 @@
 
 {% block content %}
 
-<form method="GET">
-    <p>キーワードを全て含む</p>
-    <input type="text" name="group_keywords">
-    <button type="submit">グループ検索</button>
-</form>
-<form method="GET">
-        <p>キーワードいづれかを含む</p>
-        <input type="text" name="link_keywords">
-        <button type="submit">HP登録会社一覧</button> 
-</form>
-
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>コード</th>
-            <th>補足</th>
-            <th>会社名</th>
-            <th>時価総額</th>
-            <th>電話番号</th>
-            <th>電話可能</th>
-            <th>URL</th>
+<div class="row">
+    <div class="col-3 left-pane">
+        <form method="GET">
+            <label for="id_all_included">キーワードを全て含む</label><br>
+            <input id="id_all_included" type="text" class="search" name="all_included"><br>
+          
+            <label for="id_any_included">キーワードいづれかを含む</label><br>
+            <input id="id_any_included" type="text" class="search" name="any_included"><br>
+            <input type="submit" value="検索実行">
+        </form>
+    </div>
+    <div class="col-1">
+        <a href="{% url 'main:group_list' %}" class="btn btn-primary btn-block">グループ一覧</a>
+        <a href="{% url 'main:page_list' %}" class="btn btn-primary btn-block">HP登録会社一覧</a>
+    </div>
+    <div class="col-8">
+        <form class="new_page_form">
+            <div class="row">
+                <div class="col-2">
+                    <label for="id_code">コード</label>
+                    <input id="id_code" type="text" name="code">
+                </div>
+                <div class="col-2">
+                    <label for="id_company_name">補足</label>
+                    <input id="id_comment" type="text" name="comment">
            
-        </tr>
-      
-    </thead>
-    <tbody id="sortable">
-            {% for page in object_list %}
-            <tr id="{{ page.pk }}" class="ui-state-default">
-                <td>
-                    <input readonly name="code" type="text" value="{{ page.code }}">
-                </td>
-                <td>
-                    <input readonly name="comment" type="text" value="{{ page.comment|default_if_none:'-' }}">
-                </td>
-                <td>
-                    <input readonly name="company_name" type="text" value="{{ page.company_name }}">
-                </td>
-                <td>
-                    <input readonly name="market_cap" type="number" value="{{ page.market_cap }}">
-                </td>
-                <td>
-                    <input readonly name="phone_number" type="text" value="{{ page.phone_number }}">
-                </td>
-                <td>
-                    <input type="checkbox" name="is_callable" {% if page.is_callable %} checked="checked" {% endif %}>
-                </td>
-                <td>
-                    <input readonly name="page_url" type="text" value="{{ page.page_url }}">
-                </td>
-                
-            </tr>
-            {% endfor %}
-    </tbody>
+                </div>
+                <div class="col-2">
+                    <label for="id_company_name_kana">会社名</label>
+                    <input id="id_company_name" type="text" name="company_name">
+            
+                </div>
+                <div class="col-2">
+                    <label for="id_company_name_kana">読み方</label>
+                    <input id="id_company_name_kana" type="text" name="company_name_kana">
+            
+                </div>
+                <div class="col-2">
+                    <label for="id_phone_number">電話番号</label>
+                    <input id="id_phone_number" type="text" name="phone_number">
+            
+                </div>
+                <div class="col-2">
+                    <label for="id_is_callable">電話可能</label>
+                    <input id="id_is_callable" type="checkbox" name="is_callable">
+            
+                </div>
+                <div class="col-2">
+                    <label for="id_hp_url">HPのトップページ</label>
+                    <input id="id_hp_url" type="text" name="hp_url">
+                </div>
+                <div class="col-1">
+                        <input type="submit" value="登録">
+                </div>                                                              
+            </div>
+        </form>
+    </div>
+</div>
 
-</table>
+
+
+
 {% endblock %}
 
 

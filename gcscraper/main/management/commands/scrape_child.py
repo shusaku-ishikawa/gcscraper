@@ -35,24 +35,26 @@ def run():
             else:
                 absolute_path = urljoin(parent.page_url, link['href'])
             print(absolute_path)
-            exist = CompanyHomePage.objects.filter(page_url = absolute_path)
+            exist = LinkPage.objects.filter(page_url = absolute_path)
             if len(exist) > 0:
                 obj = exist[0]
             else:
-                obj = CompanyHomePage(page_url = absolute_path, company_name = parent.company_name, parent = parent)
-            page = requests.get(absolute_path).content
-            page_parsed = BeautifulSoup(page, "html.parser")
-            # scriptタグの除去
-            for script in page_parsed.find_all('script', src=False):
-                script.decompose()
-            body = page_parsed.find('body')
-            if body != None:
-                obj.page_html = body.getText()
-            obj.display_order = CompanyHomePage.objects.all().aggregate(Max('display_order'))['display_order__max'] + 1
-            obj.save()
-            # except:
-            #     print('error occurred')
-            #     pass
+                obj = LinkPage(page_url = absolute_path, parent = parent)
+            try:
+                page = requests.get(absolute_path).content
+                page_parsed = BeautifulSoup(page, "html.parser")
+                # scriptタグの除去
+                for script in page_parsed.find_all('script', src=False):
+                    script.decompose()
+                body = page_parsed.find('body')
+                if body != None:
+                    obj.page_html = body.getText()
+                obj.save()
+            except Exception as e:
+                print(str(e.args))
+                obj.is_scrape_success = False
+            finally:
+                obj.save()
        
                 
 

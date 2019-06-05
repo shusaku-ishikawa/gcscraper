@@ -92,7 +92,9 @@
             background-color: red;
             color: white;
         }
-
+        div.caret-div {
+            width: 10%!important
+        }
 
     </style>
 {% endblock %}
@@ -113,13 +115,14 @@
                 <input style="width: 65%; display: inline-block" field_name="code" type="text" readonly value="{{ page.code }}">
                 <input style="width: 30%; display: inline-block" field_name="comment" type="text" readonly value="{{ page.comment }}">
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <input field_name="company_name" type="text" readonly value="{{ page.company_name }}">
             </div>
-            <div class="col-1">
-                <input field_name="market_cap" type="text" readonly value="{{ page.market_cap }}">
+            <div class="col-2">
+                <input field_name="company_name_kana" type="text" readonly value="{{ page.company_name_kana }}">
             </div>
-            <div class="col-1">
+                
+            <div class="col-2">
                 <input style="width: 70%; display: inline-block" field_name="phone_number" type="text" readonly value="{{ page.phone_number }}">
                 <input style="width: 20%; display: inline-block" type="checkbox" name="is_callable" {% if page.is_callable %} checked="checked" {% endif %}>
             </div>
@@ -128,10 +131,8 @@
             </div>
             <div class="col-1 text-center">
                 <button type="button" class="btn add-page-btn">追加</button>
-            </div>            
-            <div class="col-1 text-center">
                 <button type="button" class="btn delete-page-btn">削除</button>
-            </div>
+            </div>            
             <div class="hide col-12">
                 <textarea readonly class="page_memo_area">{{ page.memo }}</textarea>
             </div>
@@ -242,18 +243,17 @@
                             ).append($('<div>', { class: 'col-2' })
                                 .append($('<input>', { style: 'width:65%;display:inline-block', field_name: 'code', readonly: true, value: data.code }))
                                 .append($('<input>', { style: 'width:30%;display:inline-block', field_name: 'comment', readonly: true, value: data.comment }))
-                            ).append($('<div>', { class: 'col-3' })
+                            ).append($('<div>', { class: 'col-2' })
                                 .append($('<input>', { field_name: 'company_name', type: 'text', readonly:true, value: data.company_name}))
-                            ).append($('<div>', { class: 'col-1' })
-                                .append($('<input>', { field_name: 'market_cap', type: 'text', readonly:true, value: data.market_cap}))
-                            ).append($('<div>', { class: 'col-1' })
+                            ).append($('<div>', { class: 'col-2' })
+                                .append($('<input>', { field_name: 'company_name_kana', type: 'text', readonly:true, value: data.company_name}))
+                            ).append($('<div>', { class: 'col-2' })
                                 .append($('<input>', { style: 'width:70%;display:inline-block', field_name: 'phone_number', readonly: true, value: data.phone_number }))
                                 .append($is_callable)
                             ).append($('<div>', { class: 'col-2' })
                                 .append($('<input>', { field_name: 'page_url', readonly: true, value: data.page_url }))
                             ).append($('<div>', { class: 'col-1 text-center' })
                                 .append($('<button>', { type: 'button', class: 'btn add-page-btn', text: '追加' }))
-                            ).append($('<div>', { class: 'col-1 text-center' })
                                 .append($('<button>', { type: 'button', class: 'btn delete-page-btn', text: '削除' }))
                             ).append($('<div>', { class: 'col-12 hide' })
                                 .append($('<textarea>', { readonly: true,  class: 'page_memo_area'}))
@@ -272,8 +272,8 @@
                     alert('error');
                 });
             })
-            .on('click', '.delete-row-btn', function(event) {
-                $target = $(this).parent().parent();
+            .on('click', '.delete-page-btn', function(event) {
+                $target = $(this).closest   ('.page-li');
                 delete_page($target.attr('id'))
                 .done(function(res) {
                     if (res.error) {

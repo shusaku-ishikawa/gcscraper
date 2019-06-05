@@ -54,11 +54,18 @@ class CompanyHomePage(models.Model):
         null = True,
         default = ""
     )
-    market_cap = models.IntegerField(
+    company_name_kana = models.CharField(
+        verbose_name = '読み方',
+        max_length = 255,
+        null = True,
+        blank = True,
+        default = ""
+    )
+    market_cap = models.BigIntegerField(
         verbose_name = '時価総額',
         blank = True,
         null = True,
-        default = 0,
+        
     )
     phone_number = models.CharField(
         verbose_name = '電話番号',
@@ -122,4 +129,8 @@ class LinkPage(models.Model):
         blank = True,
         null = True,
         default = ""
+    )
+    is_scrape_success = models.BooleanField(
+        verbose_name = '取得成功',
+        default = True
     )
