@@ -13,15 +13,18 @@ class Top(LoginRequiredMixin, generic.TemplateView):
     template_name = 'main_top.html'
     def get_context_data(self, **kwargs):
         context = super(Top, self).get_context_data(**kwargs)
-        group_search = self.request.GET.get('group_keywords')
-        link_search = self.request.GET.get('link_keywords')
-        if group_search:
-            groups = Group.objects.all()
-            q = group_search.split(' ')
+        all_included = self.request.GET.get('all_included')
+        any_included = self.request.GET.get('any_included')
+        
+        groups = Group.objects.all()
+        
+
+        if all_included:
+            q = all_included.split(' ')
             query = reduce(operator.and_, (Q(name__icontains = item) for item in q))
             return groups.filter(query)
             
-        elif link_search:
+        elif any_included:
             companies = CompanyHomePage.objects.all()
             satisfy = []
             for company in companies:

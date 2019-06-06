@@ -22,6 +22,7 @@
         }
         div.container {
             padding: 0!important;
+            max-width: 98%;  
            
         }
         .new_page_form input {
@@ -39,8 +40,8 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-3 left-pane">
-        <form method="GET">
+    <div class="col-2 left-pane">
+        <form id="id_search_form" method="GET" action="#">
             <label for="id_all_included">キーワードを全て含む</label><br>
             <input id="id_all_included" type="text" class="search" name="all_included"><br>
           
@@ -53,8 +54,8 @@
         <a href="{% url 'main:group_list' %}" class="btn btn-primary btn-block">グループ一覧</a>
         <a href="{% url 'main:page_list' %}" class="btn btn-primary btn-block">HP登録会社一覧</a>
     </div>
-    <div class="col-8">
-        <form class="new_page_form">
+    <div class="col-9">
+        <form id="id_register_form" class="new_page_form">
             <div class="row">
                 <div class="col-2">
                     <label for="id_code">コード</label>
@@ -96,10 +97,18 @@
         </form>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
+    <script>
+        $(function() {
 
-
+        });
+    
+    
+    </script>
 
 {% endblock %}
+
 
 
